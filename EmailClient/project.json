@@ -1,0 +1,16 @@
+﻿{
+  "version": "1.0.0-*",
+
+	"dependencies": {
+		"Microsoft.Extensions.Options": "1.1.1",
+		"NETStandard.Library": "1.6.1",
+		"MailKit": "1.14.2",
+		"MimeKit": "1.14.1"
+	},
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
