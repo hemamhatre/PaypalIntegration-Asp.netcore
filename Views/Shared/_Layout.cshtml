@@ -1,0 +1,306 @@
+﻿@using System.Security.Claims
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ChatValues.Web</title>
+    <link rel="icon" href="~/images/favicon.ico" type="image/x-icon" />
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/bootstrap.css" />
+        <link href="~/css/chatvalues.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        @*<link rel="stylesheet" href="~/css/site.css" />*@
+        <link rel="stylesheet" href="~/css/style.css">
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        @*<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />*@
+        <link rel="stylesheet" href="~/css/style.css">
+    </environment>
+    <link rel="stylesheet" href="~/css/registration.css">
+    <link rel="stylesheet" href="~/css/jquery.popSelect.css">
+    <link rel="stylesheet" href="~/css/jquery-ui.css">
+    <script src="~/js/jquery.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+    <script src="~/js/registration.js"></script>
+    <script src="~/js/form-validator.min.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/jquery.popSelect.min.js"></script>
+    <script src="~/js/app.min.js"></script>
+    @*<script>jqcc=jQuery.noConflict(true);</script>*@
+</head>
+<body class="hold-transition sidebar-mini">
+
+
+    <div class="wrapper">
+
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <span class="logo-lg">
+
+                    <img src="~/images/logo.png" width="100%" style="max-width: 150px;" />
+
+                </span>
+            </a>
+
+
+            @Html.Partial("pvLogin")
+
+
+        </header>
+
+        <aside class="main-sidebar">
+
+            <section class="sidebar">
+
+                @{
+                    var userClaim = (ClaimsIdentity)User.Identity;
+                    var userIdVal = userClaim.Claims.FirstOrDefault<Claim>(c => c.Type == ClaimTypes.NameIdentifier);
+                    if (userIdVal != null)
+                    {
+
+
+
+                        <span>
+
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+
+                            @{
+                                string HomeClassStr = "";
+                                string ProfileClassStr = "";
+                                string JobCenterClassStr = "";
+                                string InboxClassStr = "";
+                                string ContactCentreClassStr = "";
+
+                                switch (ViewContext.RouteData.Values["controller"].ToString())
+                                {
+                                    case "Home":
+                                        HomeClassStr = "active";
+                                        break;
+                                    case "Session":
+                                        HomeClassStr = "active";
+                                        break;
+                                    case "Search":
+                                        HomeClassStr = "active";
+                                        break;
+                                    case "Account":
+                                        ProfileClassStr = "active";
+                                        break;
+                                    case "JobCentre":
+                                        JobCenterClassStr = "active";
+                                        break;
+                                    case "Message":
+                                        InboxClassStr = "active";
+                                        break;
+                                    case "ContactCentre":
+                                        ContactCentreClassStr = "active";
+                                        break;
+                                }
+                                <ul class="sidebar-menu">
+                                    <li class="@HomeClassStr">
+                                        <a class="link_color" href="@Url.Action("Sessions", "Home")">
+                                            HOME
+                                        </a>
+                                    </li>
+                                    <li class="@ProfileClassStr">
+                                        <a class="link_color" href="@Url.Action("UserProfile", "Account", new { id = userIdVal.Value })">
+                                            PROFILE
+                                        </a>
+                                    </li>
+                                    <li class="@JobCenterClassStr">
+                                        <a class="link_color" href="@Url.Action("Index", "JobCentre")">
+                                            JOB CENTER
+                                        </a>
+                                    </li>
+                                    <li class="@InboxClassStr">
+                                        <a class="link_color" href="@Url.Action("Index", "Message")">
+                                            INBOX
+                                        </a>
+                                    </li>
+                                    <li class="@ContactCentreClassStr">
+                                        <a class="link_color" href="@Url.Action("Index", "ContactCentre")">
+                                            CONTACT CENTER
+                                        </a>
+                                    </li>
+                                </ul>
+                            }
+                        </span>
+                                }
+                }
+
+
+
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <section class="content">
+
+                @RenderBody()
+
+            </section>
+        </div>
+        <footer class="main-footer margin0 padding0">
+
+            <div class="foooter">
+                <div class="bg_footer">
+                    <div class="margin_auto_footer">
+                        <div class="col-md-7 col-sm-7">
+                            <div class="">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="heading_footer">
+                                        &nbsp;
+                                    </div>
+                                    <ul>
+                                        <li>About Us</li>
+                                        <li>Press</li>
+                                        <li>Careers</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="heading_footer">
+                                        Company info
+                                    </div>
+                                    <ul>
+                                        <li>Blog</li>
+                                        <li>Terms of Service</li>
+                                        <li>Privacy policy</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="heading_footer">
+                                        &nbsp;
+                                    </div>
+                                    <ul>
+                                        <li>Trust and Safety</li>
+                                        <li>Hiring Headquarters</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-5">
+                            <div class="">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="heading_footer">
+                                        Additional Services
+                                    </div>
+                                    <ul>
+                                        <li>Enterprise Solutions</li>
+                                        <li>Local Business Resources</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="heading_footer">
+                                        Contact With US
+                                    </div>
+                                    <ul>
+                                        <li>Contact & Support</li>
+                                        <li>Mobile App</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </footer>
+        <div class="control-sidebar-bg"></div>
+    </div>
+
+
+
+    @* =-=-=--=-=-=-=-=-=-=-=-=--=-=-= OLD Code -=-=-=-=-=-=-=-=-=-=-=-=-=-=-*@
+
+
+
+    @*<hr />
+            <footer>
+                <p>&copy; 2016 - ChatValues.Web</p>
+            </footer>
+        </div>*@
+
+    @*<environment names="Development">
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery">
+            </script>
+            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+            </script>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+        </environment>*@
+
+    @RenderSection("scripts", required: false)
+    @*<link type="text/css" href="http://localhost/cometchat/cometchatcss.php" rel="stylesheet" charset="utf-8">
+        <script type="text/javascript" src="http://localhost/cometchat/cometchatjs.php" charset="utf-8"></script>*@
+    <script>
+        $(document).ready(function () {
+            var hContent = $("body").height();
+            var hWindow = $(window).height();
+            setTimeout(function () {
+                if (hContent > hWindow) {
+                    return false;
+                }
+                else {
+                    $("footer.main-footer.margin0.padding0").addClass("fixed-footer");
+                 
+                }
+            }, 100);
+
+            $(window).resize(function () {
+                var hContent = $("body").height();
+                var hWindow = $(window).height();
+
+                if (hContent > hWindow) {
+                    $("footer.main-footer.margin0.padding0").removeClass("fixed-footer");
+
+                }
+                else {
+                    $("footer.main-footer.margin0.padding0").addClass("fixed-footer");
+
+                }
+
+                var Cwidth = $(window).width();
+
+                if (Cwidth <= 768) {
+                    $('.main-sidebar').removeAttr('style');
+                    $('.deskto_btn_R').removeClass('deskto_btn_R').addClass('deskto_btn');
+                    $('.content-wrapper').css('margin-left', '0');
+                }
+                if (Cwidth >= 768) {
+                    $('.content-wrapper').css('margin-left', '230px');
+                    $('.logo').removeAttr('style');
+                }
+
+
+            });
+
+
+            $("body").on("click", ".deskto_btn", function () {
+                $('.main-sidebar').css('width', '0');
+                $('.content-wrapper').css('margin-left', '0');
+                $('.logo').css('background', '#fff');
+                $(this).removeClass('deskto_btn').addClass('deskto_btn_R');
+            });
+            $("body").on("click", ".deskto_btn_R", function () {
+                $('.main-sidebar').css('width', '230px');
+                $('.content-wrapper').css('margin-left', '230px');
+                $('.logo').css('background', '#494c5f');
+                $(this).removeClass('deskto_btn_R').addClass('deskto_btn')
+            });
+        });
+    </script>
+</body>
+
+
+</html>

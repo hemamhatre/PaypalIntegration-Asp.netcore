@@ -1,0 +1,648 @@
+﻿@using ChatValues.Web.Models
+@using System.Collections;
+@model ChatValues.Web.Models.User
+@{
+    var sessions = ViewBag.Sessions;
+}
+@if (Model.IsActive)
+{
+    <script>
+        alert("Email already exists. Please use another email ID!");
+    </script>
+}
+<script src="countries.js"></script>
+
+<style>
+    nav.navbar.navbar-static-top {
+        display: none;
+    }
+</style>
+<div class="bg_blue_light pull-left full_width">
+    <div class="">
+        <div class="padding_row">
+            <div class="col-md-12">
+                <div class="wizard_bg" style="margin-left: 25px;">
+                    <div class="wizard">
+                        <div class="wizard-inner">
+                            <div class="connecting-line"></div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
+                                        <span class="round-tab">
+                                            <i class="glyphicon glyphicon-user"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="disabled">
+                                    <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
+                                        <span class="round-tab">
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="disabled">
+                                    <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
+                                        <span class="round-tab">
+                                            <i class="glyphicon glyphicon-picture"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="disabled">
+                                    <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete">
+                                        <span class="round-tab">
+                                            <i class="glyphicon glyphicon-ok"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        @using (Html.BeginForm("CreateUser", "Account", FormMethod.Post))
+                        {
+                            <div class="tab-content form-group">
+                                <div class="tab-pane active" role="tabpanel" id="step1">
+
+                                    <div class="step1">
+                                        <div class="row">
+                                            <h4 class="text-center hed_bg">Create Your Free Profile</h4>
+                                        </div>
+                                        <div class="row">
+
+
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-group has-success">
+                                                    <label for="name">Name</label>
+                                                    @*<input type="text" class="form-control valid" name="name" data-validation="required" style="">*@
+                                                    @Html.TextBoxFor(model => model.Name, new { @Class = "form-control valid" })
+                                                    @Html.ValidationMessageFor(model => model.Name)
+                                                </div>
+
+                                                <div class="form-group has-success">
+                                                    <label for="gender"> Gender</label>
+                                                    @*<select class="form-control" name="gender">
+                                                            <option value="">Select</option>
+                                                            <option value="male">Male</option>
+                                                            <option value="female">Female</option>
+                                                        </select>*@
+                                                    @{
+                                                        List<SelectListItem> selectList = new List<SelectListItem>();
+                                                        selectList.Add(new SelectListItem() { Text = "Select", Value = "Select", Selected = true });
+                                                        selectList.Add(new SelectListItem() { Text = "Male", Value = "Male" });
+                                                        selectList.Add(new SelectListItem() { Text = "Female", Value = "Female" });
+
+                                                    }
+                                                    @Html.DropDownListFor(model => model.Gender, selectList, new { @Class = "form-control" })
+                                                </div>
+
+
+                                                <div class="form-group has-success">
+                                                    <label for="date">Date of Birth</label>
+                                                    <div class="date input-group">
+                                                     
+                                                        @Html.TextBoxFor(model => model.DateOfBirth, new { @Class = "form-control" })
+                                                    
+                                                        @Html.ValidationMessageFor(model => model.DateOfBirth)
+                                                   
+                                                            <span class="input-group-addon" id="start-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group has-success">
+                                                    <label for="Mstatus">Marital Status</label>
+                                                    @*<select class="form-control" name="Mstatus">
+                                                            <option value="">Select</option>
+                                                            <option value="Single">Single</option>
+                                                            <option value="Married">Married</option>
+                                                        </select>*@
+                                                    @{
+                                                        List<SelectListItem> msSelectList = new List<SelectListItem>();
+                                                        msSelectList.Add(new SelectListItem() { Text = "Select", Value = "Select", Selected = true });
+                                                        msSelectList.Add(new SelectListItem() { Text = "Single", Value = "Single" });
+                                                        msSelectList.Add(new SelectListItem() { Text = "Married", Value = "Married" });
+                                                        msSelectList.Add(new SelectListItem() { Text = "Other", Value = "Other" });
+
+                                                    }
+                                                    @Html.DropDownListFor(model => model.MaritalStatus, msSelectList, new { @Class = "form-control" })
+                                                </div>
+
+                                                <div class="form-group has-success">
+                                                    <label for="zip">Zip Code</label>
+                                                    @*<input type="text" name="zip" class="form-control" placeholder="Zip Code">*@
+                                                    @Html.TextBoxFor(model => model.Pincode, new { @Class = "form-control", onkeypress = "return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57", maxlength = "7" })
+                                                </div>
+
+                                                <div class="form-group has-success">
+                                                    <label for="country">Country</label>
+                                                    @*<select class="form-control" name="country">
+                <option value="">Select</option>
+                <option value="Canada">Canada</option>
+                <option value="Europe">Europe</option>
+                <option value="India">India</option>
+                <option value="UAE">UAE</option>
+                <option value="UK">UK</option>
+                <option value="USA">USA</option>
+                <option value="Other">Other</option>
+            </select>*@
+                                                    @{
+                List<SelectListItem> countrySelectList = new List<SelectListItem>();
+                            }
+
+                                 @Html.DropDownList("ddlcountry", countrySelectList, new { @Class = "form-control"  })
+                                                            @*@Html.DropDownList("ddlcountry",null, new { @Class = "form-control", id= "ddlcountry" })*@
+
+                                                            @*@Html.DropDownList("ddlcountry", null, string.Empty, new { @class = "form-control", id = "ddlcountry" })*@
+
+                                                            @*<select id="ddlcountry" name="ddlcountry" class="form-control">
+                        <option value="">select parent </option>
+                    </select>*@
+
+
+                                                </div>
+
+                                                <div class="form-group has-success">
+                                                    <label for="city">City</label>
+                                                    @*<select class="form-control" name="city" data-validation="required">
+                                                            <option value="">Select</option>
+                                                            <option value="PuneCity">Pune</option>
+                                                            <option value="MumbaiCity">Mumbai</option>
+                                                            <option value="DelhiCity">Delhi</option>
+                                                            <option value="ThaneCity">Thane</option>
+                                                        </select>*@
+                                                    @Html.TextBoxFor(model => model.City, new { @Class = "form-control" })
+                                                </div>
+
+
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group has-success">
+                                                    <label for="email">Email address</label>
+                                                    @*<input type="email" class="form-control valid" name="email" data-validation="email" style="">*@
+                                                    @Html.TextBoxFor(model => model.Email, new { @Class = "form-control valid", type = "email" })
+                                                    @Html.ValidationMessageFor(model => model.Email)
+                                                </div>
+
+                                                <div class="form-group has-success">
+                                                    <label>Password</label>
+
+                                                    @Html.PasswordFor(model => model.Password, new { @Class = "form-control valid" })
+                                                </div>
+
+                                                <div class="form-group has-success">
+                                                    <label>Confirm Password</label>
+                                                    <input type="password" name="confirm_password" id="confirm_password" class="form-control">
+                                                    <span id='message'></span>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                    <ul class="list-inline pull-right mar_ned btn_float">
+                                        <li><button type="button" class="btn btn-primary next-step" id="btnNextFromPersonalDetails">Next</button></li>
+
+                                        <li><input type="button" class="btn btn-primary next-step" value="Back" onclick="location.href='@Url.Action("Index", "Home" )'" /></li>
+
+                                    </ul>
+                                </div>
+                                <div class="tab-pane" role="tabpanel" id="step2">
+                                    <div class="step2">
+                                        <div class="row">
+                                            <h4 class="text-center hed_bg">Your Fields Of Interest</h4>
+                                        </div>
+                                        <div class="step33 well">
+                                            <div class="row">
+                                                <h4 class="text-center"></h4>
+                                                <div class="coloum_section pro_img" id="sessionDiv">
+                                                    @foreach (var session in sessions)
+                                                    {
+                                                        if (session.QuestionOptionMapping.Count > 0)
+                                                        {
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                                <div class="inner_coloum">
+                                                                    <table>
+                                                                        <tr>
+                                                                            <td style="float:right">
+                                                                                <input type="checkbox" id="chkSession_@session.Session.ID" name="chkSession_@session.Session.ID" value="@session.Session.ID" />
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+																				<img src="~/images/sessions/@session.Session.ImageName" />
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding" style="margin: 10px 0 0 0;">
+                                                                                    <div class="col-sm-6 no-padding">
+                                                                                        <h5>
+                                                                                            @session.Session.Title
+                                                                                        </h5>
+                                                                                    </div>
+                                                                                    <div class="col-sm-6 no-padding">
+                                                                                        <a class="btn btn-primary btn_Blue" href="#" onclick="ShowQuestionsDiv('@session.Session.ID')" style="text-decoration: none; float:right">
+                                                                                            Select
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                                @foreach (var session in sessions)
+                                                {
+                                                    if (session.QuestionOptionMapping.Count > 0)
+                                                    {
+                                                        var qD = "questionDiv" + session.Session.ID;
+                                                        int i = 0;
+                                                        <div id="@qD" style="display:none">
+                                                            <div class="question_parent">
+                                                                <h4>
+                                                                    @session.Session.Title
+                                                                </h4>
+                                                                <ul class="list-inline pull-right mar_ned btn_float">
+                                                                    <li><button type="button" onclick="ShowSessionsDiv('@qD')" class="btn btn-primary">Go back to Sessions</button></li>
+                                                                </ul>
+                                                                @foreach (var map in session.QuestionOptionMapping)
+                                                                {
+                                                                    string controlTypeStr = map.Question.ControlType;
+                                                                    string divQueIDstr = "div" + session.Session.ID + map.Question.ID;
+                                                                    string questionNo = "Q1.";
+                                                                    string displayNoneStr = "style=display:none";
+                                                                    string relatedOption = string.Empty;
+                                                                    if (map.Question.OptionID == null && i == 0)
+                                                                    {
+                                                                        displayNoneStr = string.Empty;
+                                                                        relatedOption = "0";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        questionNo = "Q2.";
+                                                                        if (map.Question.OptionID == null)
+                                                                        {
+                                                                            relatedOption = "0";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            relatedOption = map.Question.OptionID.ToString();
+                                                                        }
+                                                                    }
+                                                                    <div class="question_answer_parent_div" id="@divQueIDstr" @displayNoneStr data-target="@relatedOption">
+                                                                        <div class="question_section">
+                                                                            <table class="question_table">
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <strong>@questionNo</strong>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @map.Question.Title
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+
+                                                                        </div>
+                                                                        <div class="answer_option">
+                                                                            @switch (controlTypeStr)
+                                                                            {
+                                                                                case "Radio":
+                                                                                    <table class="check_list session_list">
+                                                                                        <tbody>
+                                                                                            @foreach (var option in map.Options)
+                                                                                            {
+                                                                                                string rdoIdStr = map.Question.ID + "_" + option.ID + "_rdo";
+                                                                                                <tr>
+                                                                                                    <td> <input type="radio" id="@rdoIdStr" name="@map.Question.ID" value="@option.Text" data-target="@option.ID" onclick="SetHiddenField(this,'hdnRadio_@map.Question.ID')" data-content="@questionNo" /> </td>
+                                                                                                    <td> @option.Text </td>
+                                                                                                </tr>
+                                                                                            }
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                    <input type="hidden" id="hdnRadio_@map.Question.ID" name="hdnRadio_@map.Question.ID" />
+                                                                                    break;
+                                                                                case "Textarea":
+
+                                                                                    string txtIdStr = map.Question.ID + "_txt";
+                                                                                    <table class="text_area">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td> <textarea id="@txtIdStr" name="@txtIdStr" class="form-control" maxlength="300"></textarea> </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+
+                                                                                    break;
+                                                                                case "Dropdown":
+                                                                                    string ddlIdStr = map.Question.ID + "_ddl";
+                                                                                    <table class="text_area">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <table>
+                                                                                                        <tr>
+                                                                                                            <td style="padding:5px;">
+                                                                                                                <select class="form-control session_list" id="@ddlIdStr" name="@ddlIdStr">
+                                                                                                                    @foreach (var option in map.Options)
+                                                                                                                    {
+                                                                                                                        <option value="@option.ID">@option.Text</option>
+                                                                                                                    }
+                                                                                                                </select>
+                                                                                                            </td>
+                                                                                                            <td style="padding:5px;">
+                                                                                                                <input class="form-control" type="text" id="txtEducationQ21" name="txtEducationQ21" />
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </table>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                    break;
+                                                                                case "Checkbox":
+                                                                                    <table class="check_list">
+                                                                                        <tbody>
+                                                                                            @foreach (var option in map.Options)
+                                                                                            {
+                                                                                                string chkIdStr = map.Question.ID + "_chk";
+                                                                                                <tr>
+                                                                                                    <td> <input type="checkbox" id="@chkIdStr" name="@chkIdStr" value="@option.ID" /> </td>
+                                                                                                    <td> @option.Text </td>
+                                                                                                </tr>
+                                                                                            }
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                    break;
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                    i++;
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="row">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline pull-right">
+                                        @*<li style="margin-bottom: 5px;"><button type="button" class="btn btn-default">Complete Profile Creation</button></li>*@
+                                        <li><button type="button" class="btn btn-default prev-step">Back</button></li>
+                                        <li>
+                                            @*<button type="submit" class="btn btn-primary next-step">Submit</button>*@
+                                            <input type="submit" class="btn btn-primary" title="Submit" value="Submit" />
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane" role="tabpanel" id="step3">
+                                    <div class="step_21">
+                                        <div class="body_panal row well text-center">
+                                            <h4 class="text-center hed_bg">Profile Sucessfully Created!</h4>
+                                            @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam rutrum convallis semper. Phasellus tempor hendrerit tincidunt. Cras venenatis convallis lectus, at suscipit erat. </p>
+                                                <a class="btn_mrgn btn btn-default" href="#">CLICK HERE NOW</a>*@
+                                        </div>
+                                        <div class="clear"></div>
+                                        <div class="body_panal row well text-center Step3rd">
+                                            <h4 class="text-center hed_bg">Upload Photos Now!</h4>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam rutrum convallis semper. Phasellus tempor hendrerit tincidunt. Cras venenatis convallis lectus, at suscipit erat.</p>
+                                            <div class="upload_btn">
+                                                <i class="glyphicon glyphicon-picture"></i>
+                                                <input type="file" class="hide_file" accept="image/*">
+                                            </div>
+                                            <h5>Upload Your Photos</h5>
+                                            <!-- <input type="file" class="btn btn-default file_mrgn"> -->
+                                        </div>
+                                        <div class="clear"></div>
+                                        <div class="body_panal row well text-center">
+                                            <h4 class="text-center hed_bg">Invalid Email Warning!</h4>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline pull-right">
+                                        <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
+                                        <!-- <li><button type="button" class="btn btn-default next-step">Skip</button></li> -->
+                                        <li><button type="button" class="btn btn-primary btn-info-full next-step">Submit</button></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane" role="tabpanel" id="complete">
+                                    <div class="step44 text-center">
+                                        <h2>Thank's For Registration</h2>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                                                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    /// Validation for DOB
+
+    //// country list 
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            contentType: JSON,
+            url: "../Countries.json",
+            dataType: "json",
+            success: function (data) {
+                var div_data = "";
+                for (var i = 0 ; i < data.length; i++) {
+                    div_data += "<option value='" + data[i].name + "'>" + data[i].name + "</option>";
+                }
+                $(div_data).appendTo('#ddlcountry');
+            }
+        });
+
+
+        // With Bottom Popover
+        $('#CustomDDL').popSelect({
+            showTitle: false,
+            placeholderText: 'Click to Add More',
+            position: 'bottom'
+        });
+
+        $('#btnAddNewSession').click(function () {
+            $('#divSession2').show();
+        });
+
+        $("#DateOfBirth").val('');
+        $('#Pincode').val('');
+        $("#DateOfBirth").datepicker({
+            dateFormat: "dd-mm-yy",
+            changeMonth: true,
+            changeYear: true,
+            maxDate: 0,
+            yearRange: '1950:' + new Date().getFullYear().toString()
+        });
+        $("#DateOfBirth").focus(function () {
+            $("#DateOfBirth").datepicker("show");
+        });
+
+        $('.tabs-menu li').click(function () {
+            var id_innerTab = $(this).find('a').attr('data-value');
+            $('.tabs-menu li').removeClass('current');
+            $('.tab-content_inner').hide();
+            $(this).addClass('current');
+            $(id_innerTab).show();
+
+        });
+    });
+
+    $('#Password').on('keyup', function () {
+        if ($(this).val() == "" && $('#confirm_password').val() == "") {
+            $('#btnNextFromPersonalDetails').attr('disabled', true);
+        }
+        else {
+            if ($(this).val() == $('#confirm_password').val()) {
+                $('#btnNextFromPersonalDetails').attr('disabled', false);
+                $('#message').html('Password matching').css('color', 'green');
+            } else {
+                $('#btnNextFromPersonalDetails').attr('disabled', true);
+                $('#message').html('Password does not match').css('color', '#a94442');
+            }
+        }
+    });
+
+    $('#confirm_password').on('keyup', function () {
+        if ($(this).val() == "" && $('#Password').val() == "") {
+            $('#btnNextFromPersonalDetails').attr('disabled', true);
+        }
+        else {
+            if ($(this).val() == $('#Password').val()) {
+                $('#btnNextFromPersonalDetails').attr('disabled', false);
+                $('#message').html('Password matching').css('color', 'green');
+            } else {
+                $('#btnNextFromPersonalDetails').attr('disabled', true);
+                $('#message').html('Password does not match').css('color', '#a94442');
+            }
+        }
+    });
+
+    $('#Password').on('focusout', function () {
+        if ($(this).val() != $('#confirm_password').val()) {
+            $('#message').show();
+        }
+        else $('#message').hide();
+    });
+
+    $('#confirm_password').on('focusout', function () {
+        if ($(this).val() != $('#Password').val()) {
+            $('#message').show();
+        }
+        else $('#message').hide();
+    });
+
+    $('#confirm_password').on('focusin', function () {
+        $('#message').show();
+    });
+
+    $('#Password').on('focusin', function () {
+        //debugger;
+        $('#message').show();
+    });
+
+    $('.education_list input').on('change', function () {
+        if (this.checked) {
+            var value = "#" + $(this).val();
+            $('.educationQ2').hide();
+            $(value).show();
+        }
+    });
+
+    $('.business_list input').on('change', function () {
+        if (this.checked) {
+            var value = "#" + $(this).val();
+            $('.businessQ2').hide();
+            $(value).show();
+        }
+    });
+
+    $('.sports_list input').on('change', function () {
+        if (this.checked) {
+            var value = "#" + $(this).val();
+            $('.sportsQ2').hide();
+            $(value).show();
+        }
+    });
+
+    $('.games_list input').on('change', function () {
+        if (this.checked) {
+            var value = "#" + $(this).val();
+            $('.gamesQ2').hide();
+            $(value).show();
+        }
+    });
+
+    $('.arts_list input').on('change', function () {
+        if (this.checked) {
+            var value = "#" + $(this).val();
+            $('.artsQ2').hide();
+            $(value).show();
+        }
+    });
+
+    $('.session_list input').on('change', function () {
+        debugger;
+        var dtCnt = $(this).attr('data-content');
+        if (this.checked && dtCnt != 'Q2.') {
+            var value = $(this).attr('data-target');
+            $('div.question_answer_parent_div').each(function () {
+                if ($(this).attr('data-target') == value || $(this).attr('data-target') == "0") {
+                    $(this).show();
+                }
+                else
+                    $(this).hide();
+            });
+        }
+    });
+
+
+    function ShowAnswerDiv(divId) {
+        $("#divQASession" + divId).show();
+    }
+
+    function ShowQuestionsDiv(sessionID) {
+        //i = 0;
+        //$('#sessionDiv input[type=checkbox]').each(function () {
+        //    if (i > 3) {
+        //        //alert('You can add up to 3 sessions only. Please unselect any of the session to add another.');
+        //        return;
+        //    }
+        //    if ($(this).attr('checked')) {
+        //        i++
+        //    }
+        //});
+
+        var queDivId = '#questionDiv' + sessionID;
+        $('#sessionDiv').hide();
+        $(queDivId).show();
+        var chkId = '#chkSession_' + sessionID;
+        $(chkId).attr('checked', 'true');
+    }
+
+    function ShowSessionsDiv(questionDiv) {
+        questionDiv = "#" + questionDiv;
+        $('#sessionDiv').show();
+        $(questionDiv).hide();
+    }
+
+    function SetHiddenField(rdo, hdnId) {
+        hdnId = '#' + hdnId;
+        $(hdnId).val(rdo.id);
+    }
+</script>

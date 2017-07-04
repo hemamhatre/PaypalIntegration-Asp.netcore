@@ -1,0 +1,181 @@
+﻿@using ChatValues.Web.Models
+
+@model List<ChatValues.Web.Models.UserSessionItem>
+@{
+    UserSessionItem userSessionItem = new UserSessionItem();
+    if (ViewBag.DisplaySessions == false)
+    {
+        userSessionItem = Model[0];
+
+    }
+    @*var userClaim = (ClaimsIdentity)User.Identity;
+    var userIdVal = userClaim.Claims.FirstOrDefault<Claim>(c => c.Type == ClaimTypes.NameIdentifier);*@
+}
+<div class="pro_view">
+    
+    <div class="pull-left full_width">
+        <div class="">
+            <div class="col-md-12">
+
+                <div class="">
+                    <div class="">
+                        @*<div class="advertisement_div">
+                            <img width="100%" src="~/images/advertisement.png" />
+                        </div>*@
+
+                        <div class="top_sessions">
+                            <div class="bg_w">
+                                @if (ViewBag.DisplaySessions == true)
+                                {
+                                    @*<h3 class="home_heading text-center">
+                                        TOP SESSIONS
+                                    </h3>*@
+                                    @*<div class="text_data">
+                                        Lorem Ipsum is simply dummy text of the printing. Lorem Ipsum is simply dummy text of the printing. Lorem Ipsum is simply dummy text of the printing. Lorem Ipsum is simply dummy text of the printing.
+                                    </div>*@
+                                }
+                                else
+                                {
+                                    <h3 class="home_heading text-center">
+                                        CATEGORIES OF @Html.Raw(userSessionItem.Session.Title.ToString().ToUpper())
+                                    </h3>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    @if (ViewBag.DisplaySessions == true)
+                    {
+                        <div class="coloum_section pro_img">
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="inner_coloum">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <img src="~/images/sessions/@Model[i].Session.ImageName" />
+
+                                                    @*<img src="~/images/Home Images/artDesign.jpg" />*@
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+
+                                                    <div class="bottom_text">
+                                                        <div class="pull-left">
+                                                            <div>
+                                                                <b>  @Model[i].Session.Title </b>
+                                                            </div>
+                                                            <div>
+                                                                <i>   @Model[i].MemberCount Members </i> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="pull-right">
+                                                            <a class="btn btn-primary custom_btn" href="@Url.Action("Members","Session")/@Model[i].Session.ID">More</a>
+</div>
+                                                    </div>
+
+                                                    @*<a href="@Url.Action("Members","Session")/@Model[i].Session.ID">
+                                                        <div>
+                                                            <h3>
+                                                                
+                                                            </h3>
+                                                            <div class="text_members">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </a>*@
+
+
+                                                </td>
+                                            </tr>                                            
+                                        </table>
+                                    </div>
+                                    @*<div class="inner_coloum">
+                                            <table>
+                                                <tr>
+                                                    <td class="br_right">
+                                                        <img src="~/images/sessions/@Model[i].Session.ImageName" />
+                                                    </td>
+                                                    <td>
+                                                        <div class="box_side_home">
+                                                            <h3>
+                                                                <a href="@Url.Action("Members","Session")/@Model[i].Session.ID">
+                                                                    @Model[i].Session.Title
+                                                                </a>
+                                                            </h3>
+
+                                                            <div class="text_members">
+                                                                @Model[i].MemberCount Members
+                                                            </div>
+                                                            <div class="text_sessions">
+                                                                @Model[i].Session.Description
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>*@
+                                </div>
+
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        if (userSessionItem.Categories.Count != 0)
+                        {
+                            <div class="coloum_section">
+                                @for (int i = 0; i < userSessionItem.Categories.Count; i++)
+                                {
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="inner_coloum">
+                                            <table>
+                                                <tr>
+                                                    <td class="br_right"></td>
+                                                    <td>
+                                                        <div class="box_side_home">
+                                                            <h3>
+                                                                @userSessionItem.Categories[i].Title
+                                                            </h3>
+                                                            <div class="text_members">
+
+                                                            </div>
+                                                            <div class="text_sessions">
+                                                                @userSessionItem.Categories[i].Description
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="coloum_section">
+                                No categories found
+                            </div>
+                        }
+                    }
+                    @*<div class="view_all_btn">
+                            <button type="button" class="btn btn-primary view_all_btn_home"> View All </button>
+                        </div>*@
+                </div>
+                <!-- / End .col-md-8 -->
+                @*<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 no-padding">
+                        <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                    </div>                    
+                    <div class="clear"></div>
+                    @await Component.InvokeAsync("OnlineUserWP")
+                    <div class="col-xs-12 no-padding">
+                        <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                    </div>
+                </div>*@ <!-- / End .col-md-4 -->
+            </div> <!-- / End .padding_row -->
+        </div>
+    </div> <!-- / End .bg_blue_light .pull-left .full_width -->
+</div>

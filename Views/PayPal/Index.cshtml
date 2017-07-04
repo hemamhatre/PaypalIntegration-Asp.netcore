@@ -1,0 +1,159 @@
+﻿
+@{
+    if (ViewBag.ErrorMessage != null)
+    {
+        <script>
+            alert(@ViewBag.ErrorMessage);
+        </script>
+    }
+
+    <td>@ViewBag.Message</td>
+}
+
+<div class="pro_view" style="background-color:#dfdce3;">
+    <div class="pull-left full_width">
+            <div class="">
+                <div class="col-md-12 div">
+                    <div class="login_main_wrapper1">
+
+                        <div class="headerFontCheckout">
+                          Payment Checkout
+                        </div>
+                        <div class="margin_div_max ">
+                            <div class="headerFont">REVIEW YOUR VOUCHER PURCHASE</div>
+                            <div class="table-responsive borderless" >
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Payment Type</th>
+                                            <th colspan="3">Quantity</th>
+                                            <th colspan="2">Unit Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2">PayPal</td>
+                                            <td colspan="3" id="inputQuantity">
+                                                @ViewBag.VoucherQuantity
+                                            </td>
+                                            <td colspan="2">$5.00</td>
+                                            <td id="tdTotal">$@ViewBag.VoucherQuantity * 5</td>
+                                            @*<td>
+                                                <a href="#"><i class="fa fa-trash-o"></i></a>
+                                            </td>*@
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                                <div style="float: right;">
+                                    @*<button type="submit" id="btnConfirm" name="confirm" class="btn btn-primary btn-sm confirm">Confirm Purchase</button>*@                                   
+                                    @Html.Raw(@ViewBag.payPalbutton)
+                                </div>
+                            </div>
+                     </div>
+                    <!-- / End .col-md-8 -->
+                    <!-- / End .col-md-4 -->
+                </div> <!-- / End .padding_row -->
+            </div>
+        </div>
+        </div> <!-- / End .bg_blue_light .pull-left .full_width -->
+<style>
+    .login_main_wrapper1 {
+    position: absolute ;
+    top: 0;
+    left: 0;
+    z-index: 800;
+    /*background-image: url(../../images/back_login.jpg);*/
+    width: 100%;
+    height:100%;
+    background-size: cover;
+    }
+
+.margin_div_max {
+    float: left;
+    width: 50%;
+    max-width: 433px;
+    margin-top: 51px;
+    margin-right: 43px;
+}
+
+    .headerFontCheckout
+    {
+        font-size:20px;
+        color: #03548c;
+        margin-left: 169px;
+       margin-top: 17px;
+    }
+
+     .headerFont
+    {
+        font-size:16px;
+        color: #03548c;
+    }
+
+    .div{
+         height : 60vh;
+    }
+
+    .paypalButtonAling{
+    float: right;
+    margin-right: 48px;
+    }
+
+    .table-responsive {
+        margin-top: 4px !important;
+        color: #03548c;
+    }
+
+    .table tbody tr td input {
+    width: 77px;
+    text-align: right;
+}
+
+    .confirm
+    {
+      margin-left: -127px;
+      margin-bottom: -42px;
+    }
+
+</style>
+<script>
+    function formatNumber()
+    {
+
+        var total = $("#inputQuantity").text() * 5;
+        var value = total.toLocaleString('en-US', {
+            minimumFractionDigits: 2
+        });
+        $("#tdTotal").html('$' + value);
+    }
+
+    $(":input").bind('keyup mouseup', function () {
+
+        formatNumber();
+        var qty = $("#inputQuantity").val();
+        var total = qty * 5;
+        var url = '@Url.Action("ConfirmPurchase", "PayPal", new { quantity = "_quantity", amount = "_amount"})';
+        url = url.replace("_amount", total);
+        url = url.replace("_quantity", qty);
+        url = url.replace(/&amp;/g, "&");
+        window.location.href = url;
+    });
+
+    $(document).ready(function () {
+
+        formatNumber();
+
+        $("#btnConfirm").click(function (event) {
+            var qty = $("#inputQuantity").val();
+            var total = qty * 5;
+            var url = '@Url.Action("ConfirmPurchase", "PayPal", new { quantity = "_quantity", amount = "_amount"})';
+            url = url.replace("_amount", total);
+            url = url.replace("_quantity", qty);
+           url = url.replace(/&amp;/g, "&");
+            window.location.href = url;
+        });
+    });
+</script>

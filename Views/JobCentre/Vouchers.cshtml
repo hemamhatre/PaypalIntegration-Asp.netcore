@@ -1,0 +1,194 @@
+﻿@model ChatValues.Web.Models.Voucher
+@{
+    if (ViewBag.ErrorMessage != null)
+    {
+        <script>
+            alert(@ViewBag.ErrorMessage);
+        </script>
+    }
+
+    <td>@ViewBag.Message</td>
+}
+
+<div class="home2">
+
+    <div class="bg_blue_light pull-left full_width">
+        <div class="">
+            <div class="padding_row">
+                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                    <div class="top_sessions">
+                        <div class="bg_w toggle_btn">
+                            <button type="button" class="navbar-toggle collapsed pro_tBtn" data-toggle="collapse" data-target="#bs-example-navbar-collapse-3" aria-expanded="false">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <div class="collapse navbar-collapse pro_nav" id="bs-example-navbar-collapse-3">
+
+                            </div>
+                            <!-- /.navbar-collapse -->
+                            <div class="jobcard_btn border_1">
+                                <ul class="nav nav-pills">
+                                    <li class="active">
+                                        <a href="#buy" data-toggle="tab">Buy Vouchers</a>
+                                    </li>
+                                    <li>
+                                        <a href="#grant" data-toggle="tab">Grant Vouchers</a>
+                                    </li>
+                                    <li>
+                                        <a href="#redeem" data-toggle="tab">Redeem Vouchers</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index","JobCentre")">Back to job centre</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content clearfix">
+                                    <div class="tab-pane active" id="buy">
+                                        <div class="coloum_section pro_img">
+                                            <div class="col-xs-12 sec_L">
+                                                @using (Html.BeginForm("BuyVouchers", "JobCentre", FormMethod.Post))
+                                                {
+                                                    <table cellpadding="1" cellspacing="1">
+                                                        <tr>
+                                                            <td style="width: 60%">
+                                                                @Html.TextBoxFor(model => model.Quantity, new { placeholder = "Add voucher value" })
+                                                            </td>
+                                                            <td style="width: 40%; float: right">
+                                                                <button type="submit" class="btn btn-primary next-step">Buy</button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="grant">
+                                        <div class="coloum_section pro_img">
+                                            <div class="col-xs-12 sec_L">
+                                                @using (Html.BeginForm("GrantVouchers", "JobCentre", FormMethod.Post))
+                                                {
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 60%">
+                                                                @Html.TextBoxFor(model => model.Quantity, new { placeholder = "Add voucher value" })
+                                                            </td>
+                                                            <td>  
+                                                                    @Html.TextBox("SrchUser" , null , new { placeholder = "Enter User To Grant" } )
+                                                              </td>
+                                                            <td style="width: 40%; float: right">
+                                                                <button type="submit" class="btn btn-primary next-step" id="GrantSave">Grant</button>
+                                                            </td>
+
+                                                        </tr>
+                                                    </table>
+                                                }
+                                                @if (ViewBag.Message != null)
+                                                {
+                                                    <script type="text/javascript">
+                                                        window.onload = function () {
+                                                            $("#SrchUser").empty();
+                                                            $('a[href="#grant"]').click();
+                                                            alert("@ViewBag.Message");
+
+                                                        };
+                                                    </script>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="redeem">
+                                        <div class="coloum_section pro_img">
+                                            <div class="col-xs-12 sec_L">
+                                                @using (Html.BeginForm("RedeemVouchers", "JobCentre", FormMethod.Post))
+                                                {
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 60%">
+                                                                @Html.TextBoxFor(model => model.Quantity, new { placeholder = "Add voucher value" })
+                                                            </td>
+                                                            <td style="width: 40%; float: right">
+                                                                <button type="submit" class="btn btn-primary next-step">Redeem</button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- / End .col-md-8 -->
+
+                <div class="col-xs-12 col-md-3 col-lg-3">
+                    @*<div class="col-xs-12 no-padding">
+                            <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                        </div>*@
+                    <div class="clear"></div>
+                    @await Component.InvokeAsync("OnlineUserWP")
+                    @*<div class="col-xs-12 no-padding">
+                            <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                        </div>*@
+                </div>
+                <!-- / End .col-md-4 -->
+            </div>
+            <!-- / End .padding_row -->
+        </div>
+    </div>
+    <!-- / End .bg_blue_light .pull-left .full_width -->
+</div>
+
+
+<script type="text/javascript">
+
+        $(function () {
+            SearchText();
+        });
+        function SearchText() {
+            debugger;
+            $("#SrchUser").autocomplete({
+                source: function (request, response) {
+                    var results = $.ui.autocomplete.filter(response, request.term);
+                    $.ajax({
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        url: "@(Url.Action("Details", "JobCentre"))",
+                        data: { Prefix: request.term },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.length > 0) {
+                                response($.map(data, function (item) {
+                                    return {
+                                        label: item.name.split('/')[0],
+                                        val: item.name.split('/')[1]
+                                    }
+                                }));
+                            }
+                            else {
+                                response([{ label: 'No Records Found', val: -1 }]);
+                            }
+                        },
+                        error: function (result) {
+                            alert("Error");
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.val == -1) {
+                        return false;
+                    }
+
+                }
+            });
+        }
+
+</script>
+

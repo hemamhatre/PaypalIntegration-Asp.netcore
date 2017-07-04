@@ -1,0 +1,536 @@
+﻿@using System.Security.Claims
+@model ChatValues.Web.Models.UserJobCard
+@{
+
+}
+
+<div class="clear"></div>
+<div class="padding_row pro_view">
+
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="margin_top_Profile">
+
+                <div class="right_side-screen pull-left full-width">
+                    <div class="info_profile_member text-center">
+                        <img class="img_profile_JobCard" width="100%" src="@ViewBag.ProfilePhoto" />
+                        @if (ViewBag.NewUserTag == true)
+                        {
+                            <span class="badge tilt">New</span>
+                        }
+                        @if (ViewBag.LoggedInUser != null && ViewBag.LoggedInUser == true)
+                        {
+
+                            <button class="btn_none edit_profile_btn" data-toggle="modal" data-target="#uploadProfilePhoto"> <i class="glyphicon glyphicon-pencil edit_profile_icon"></i> </button>
+                        }
+                    </div>
+
+
+
+                    <div class="pull-left full_width text-center">
+                        <h3>@Model.User.Name, @ViewBag.AgeString</h3>
+                        <strong>@Model.User.JobTitle</strong>
+                        <p><i class="glyphicon glyphicon-map-marker "> </i>@Model.User.City, @Model.User.Country</p>
+                    </div>
+                    @if (ViewBag.LoggedInUser != null && ViewBag.LoggedInUser != true)
+                    {
+                        @*<a href="#" data-toggle="modal" data-target="#recommendModal">
+                                <div class="like_icon">
+                                    <i class="glyphicon glyphicon-thumbs-up icon_porperty"></i>
+                                    <p>Recommend</p>
+                                </div>
+                            </a>*@
+                    }
+                    else
+                    {
+                        <div class="like_icon"></div>
+                    }
+
+                    <div class="pull-left full_width text-center padding_5">
+                        <h4 class="pull-left full_width text-center">About Me:</h4>
+                        <p class="text-left">@Model.User.AboutMe</p>
+                    </div>
+                    <div class="text-center pull-left full_width">
+                        <div class="three_icon">
+                            @if (ViewBag.LoggedInUser != null && ViewBag.LoggedInUser != true)
+                            {
+                                @if (ViewBag.IsUserRecommended == false)
+                                {
+                                    <a href="#" onclick="Recommend('@Model.User.ID','R')">
+                                        <div class="icon_align" title="Recommend">
+                                            <i class="glyphicon glyphicon-thumbs-up icon_porperty"></i><br />
+                                        </div>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#" onclick="Recommend('@Model.User.ID','UR')">
+                                        <div class="icon_align" title="Un-recommend">
+                                            <i class="glyphicon glyphicon-thumbs-up icon_porperty"></i><br />
+                                        </div>
+                                    </a>
+                                }
+                                <a href="#" data-toggle="modal" data-target="#myModal" onclick="document.getElementById('hdnToUserID').value=@Model.User.ID;">
+                                    <div class="icon_align" title="Send Message">
+                                        <i class="glyphicon glyphicon-thumbs-up icon_porperty"></i><br />
+                                    </div>
+                                </a>
+                                @if (ViewBag.IsSetAsFavourite == false)
+                                {
+                                    <a href="#" onclick="SetFavourite('@Model.User.ID','F')">
+                                        <div class="icon_align" title="Add To Favourite">
+                                            <i class="glyphicon glyphicon-heart icon_porperty"></i><br />
+                                        </div>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#" onclick="SetFavourite('@Model.User.ID','RF')">
+                                        <div class="icon_align" title="Remove Favourite">
+                                            <i class="glyphicon glyphicon-heart icon_porperty"></i><br />
+                                        </div>
+                                    </a>
+                                }
+
+                                @if (ViewBag.IsUserBlocked == false)
+                                {
+                                    <a href="#" onclick="BlockUnblockUser('@Model.User.ID','B')">
+                                        <div class="icon_align" title="Block">
+                                            <i class="glyphicon glyphicon-remove icon_porperty"></i><br />
+                                        </div>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#" onclick="BlockUnblockUser('@Model.User.ID','UB')">
+                                        <div class="icon_align" title="Unblock">
+                                            <i class="glyphicon glyphicon-remove icon_porperty"></i><br />
+                                        </div>
+                                    </a>
+                                }
+
+                            }
+                            else
+                            {
+                                <div class="icon_align"></div>
+                                <div class="icon_align"></div>
+                                <div class="icon_align">
+
+                                </div>
+                                <div class="icon_align">
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="pro_btn pull-left full_width" style="margin-top:20px;">
+                        <a href="#">SUCCESS RATE 0/10</a>
+                        @{
+
+                            var totalRecommendCount = (ViewBag.RecommendationCount != null) ? ViewBag.RecommendationCount : 0;
+                        }
+                        <a href="#"> Recomendation : @totalRecommendCount</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.JobCard != null)
+        {
+            <div class="col-md-8">
+                <div class="job_card_details margin_top_Profile">
+                    <div class="jobcard_bg">
+                        <h3 class="text-center no-margin jobCard_MenuHeader">
+                            @if (ViewBag.IsNewJobCard == true)
+                            {
+                                <span class="badge job-card tilt">New</span>
+                            }
+                            JOB CARD
+                        </h3>
+                        @if (ViewBag.LoggedInUser != null && ViewBag.LoggedInUser == true)
+                        {
+                            <button class="btn_none edit_profile_btn add_job_card"> <i class="glyphicon glyphicon-pencil edit_profile_icon"></i> </button>
+                        }
+                        <div class="Jobcard_SubMenu">
+                            <h4 class="">JOB TITLE : @Model.JobCard.Title</h4>
+                            @*<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus, leo in aliquet pretium, augue erat auctor dolor, sodales efficitur purus orci ac nibh.</p>*@
+                            <hr>
+                            <strong>Description</strong>
+                            @*<p> @Model.JobCard.Description </p>*@
+                            <p class="text-justify">@Html.TextArea("TxtDescription", Model.JobCard.Description, new { cols = "82", rows = "5", @readonly = "true", @multiline = "true" })</p>
+                            <div class="bg_seprator">
+                            </div>
+                            <div class="Jobcard_well">
+                                @if (ViewBag.FileNames != null)
+                                {
+                                    string[] fileNames = ViewBag.FileNames;
+                                    if (fileNames.Length > 0)
+                                    {
+                                        for (int i = 0; i < fileNames.Length; i++)
+                                        {
+                                            var fileName = fileNames[i].Substring(fileNames[i].LastIndexOf(@"\") + 1);
+                                            <img src="~/images/Jobcard/@Model.JobCard.ID/@fileName" />
+                                        }
+                                    }
+                                }
+                            </div>
+
+                            <div class="jobcard_btn col-xs-12 col-sm-12 col-md-12 col-lg-12 no-margin no-padding" style="margin-bottom: 20px;">
+
+                                <a href="#">Value : @Model.JobCard.VoucherValue Vouchers</a>
+                                @if (ViewBag.LoggedInUser != null && ViewBag.LoggedInUser != true)
+                                {
+                                    <a class="btn btn-primary btn_Blue" href="#" onclick="ConfirmDeal('@Model.JobCard.ID','@Model.User.ID');">DEAL</a>
+                                }
+                                <a href="#">Total Views :@ViewBag.ViewJobCount</a>
+                                <a href="#">Vouchers Bought :@ViewBag.BroughtVouchers</a>
+                                <a href="#">Vouchers Balanced :@ViewBag.BalanceVouchers</a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="jobcard_rating col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="icon_align col-xs-12 col-sm-12 col-md-4 col-lg-4 no-margin no-padding">
+                            <strong>About this Job</strong><br />
+                            <span>Uploaded On : @ViewBag.JobCardCreateOn </span>
+                        </div>
+                        <div class="icon_align col-xs-12 col-sm-12 col-md-4 col-lg-4 no-margin no-padding">
+                            <strong>Ranking : Normal</strong><br />
+                            <span>0 Reviews</span>
+                        </div>
+                        <div class="icon_align col-xs-12 col-sm-12 col-md-4 col-lg-4 no-margin no-padding">
+                            <strong>About This Job</strong><br />
+                            <span>0 People got it</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="job_form_show_Edit" style="display:none">
+                    @using (Html.BeginForm("EditJobCard", "Account", FormMethod.Post, new { @Class = "form-horizontal", enctype = "multipart/form-data" }))
+                    {
+                        @Html.HiddenFor(model => model.User.ID)
+                        @Html.HiddenFor(model => model.JobCard.ID)
+                        <div class="jobcard_bg bg_sBlue margin_top_Profile">
+                            <h3 class="text-center no-margin jobCard_MenuHeader">JOB CARD</h3>
+                            <div class="Jobcard_SubMenu">
+                                <div class="form-addJob">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">JOB CARD TITLE :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            @*<textarea type="text" class="form-control" id="" placeholder=""> </textarea>*@
+                                            @Html.TextAreaFor(model => model.JobCard.Title, new { @Class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">DESCRIPTION :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            @*<textarea type="text" class="form-control" id="" placeholder=""> </textarea>*@
+                                            @Html.TextAreaFor(model => model.JobCard.Description, new { @Class = "form-control", @maxlength = 1000 })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">VOUCHER VALUE :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            @*<textarea type="text" class="form-control" id="" placeholder=""> </textarea>*@
+                                            @Model.JobCard.VoucherValue
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">UPLOAD PHOTOS :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            <div class="upload_btn">
+                                                <i class="glyphicon glyphicon-plus"></i>
+                                                <input type="file" id="profileFiles" name="profileFiles" class="hide_file" multiple accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn blue_btn_job" id="btnSaveJobCard">Save</button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="col-md-8">
+                <div class="AddJobCard margin_top_Profile">
+                    <div class="addNewBg">
+                        @if (ViewBag.LoggedInUser != null && ViewBag.LoggedInUser == true)
+                        {
+                            @*<a class="btn btn_blue_icon add_job_card"> <span class="icon_plus"> <i class="glyphicon glyphicon-plus"></i></span> Add new job card </a>*@
+                            <a href="@Url.Action("CreateJobCard","Account")" class="btn btn_blue_icon"> <span class="icon_plus"> <i class="glyphicon glyphicon-plus"></i></span> Add new job card </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn_blue_icon">Job card not created</a>
+                        }
+                    </div>
+                </div>
+                <div class="job_form_show margin_top_Profile">
+                    @using (Html.BeginForm("CreateJobCard", "Account", FormMethod.Post, new { @Class = "form-horizontal", enctype = "multipart/form-data" }))
+                    {
+                        @Html.HiddenFor(model => model.User.ID)
+                        <div class="jobcard_bg bg_sBlue">
+                            <h3 class="text-center no-margin jobCard_MenuHeader">JOB CARD</h3>
+                            <div class="Jobcard_SubMenu">
+                                <div class="form-addJob">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">JOB CARD TITLE :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            @*<textarea type="text" class="form-control" id="" placeholder=""> </textarea>*@
+                                            @Html.TextAreaFor(model => model.JobCard.Title, new { @Class = "form-control", @maxlength = 1000 })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">DESCRIPTION :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            @*<textarea type="text" class="form-control" id="" placeholder=""> </textarea>*@
+                                            @Html.TextAreaFor(model => model.JobCard.Description, new { @Class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">VOUCHER VALUE :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            @*<textarea type="text" class="form-control" id="" placeholder=""> </textarea>*@
+                                            @Html.TextBoxFor(model => model.JobCard.VoucherValue, new { @Class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="checkbox" id="chkTerms" name="chkTerms" value="chkTerms" /> I agree to the ChatValues <a href="#" data-toggle="modal" data-target="#termsModal">terms and conditions</a>.
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label padding_Jobform">UPLOAD PHOTOS :</label>
+                                        <div class="col-sm-9 padding_Jobform">
+                                            <div class="upload_btn">
+                                                <i class="glyphicon glyphicon-plus"></i>
+                                                <input type="file" id="profileFiles" name="profileFiles" class="hide_file" multiple accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn blue_btn_job" disabled id="btnSaveJobCard">Save</button>
+                        </div>
+                    }
+                </div>
+                <div class="clear"></div>
+            </div>}
+    </div>
+</div>
+<!-- Terms & Conditions -->
+<div id="termsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Terms and conditions</h4>
+            </div>
+            <div class="modal-body">
+                We wish you carefully read:
+                <ul>
+                    <li>Redemption of your sold out vouchers is subject to your client satisfaction. Your on time answers and quality services will make a better clients network and better earning as a consequence.</li>
+                    <li>You would have one week to complete your job after your job card is sold out.</li>
+                    <li>Vouchers prices and service charges and also few days needed for redemption.</li>
+                    <li>Fraud protection</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAgreeTerms" class="btn btn-default" data-dismiss="modal">Agree</button>
+                <button type="button" id="btnDisagreeTerms" class="btn btn-default" data-dismiss="modal">Disagree</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Send message Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            @using (Html.BeginForm("SendMessage", "Message", FormMethod.Post))
+            {
+                <input type="hidden" id="hdnFromUserId" name="hdnFromUserId" value="@ViewBag.UserId" />
+                <input type="hidden" id="hdnToUserID" name="hdnToUserID" />
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Send Message</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea id="txtSendMessage" name="txtSendMessage" class="form-control">Hi! I would like to invite you to discuss on a new prospect.</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Send</button>
+                </div>}
+        </div>
+
+    </div>
+</div>
+
+<!-- Recommend Modal -->
+<div id="recommendModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Recommend @Model.User.Name</h4>
+            </div>
+            <div class="modal-body">
+                <textarea id="txtMessage" class="form-control" placeholder="Write your recommendation here..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Send Recommendation</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Upload Profile Photo Modal -->
+<div id="uploadProfilePhoto" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            @using (Html.BeginForm("UploadProfilePhoto", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Upload Profile Photo</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="file" id="newProfilePhoto" name="newProfilePhoto" placeholder="Upload photo" accept="image/*" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default" onclick="return ValidateImage()">Upload photo</button>
+                </div>}
+        </div>
+
+    </div>
+</div>
+<script>
+	$(document).ready(function ()
+	{
+		$('.add_job_card').click(function ()
+		{
+			$('.job_form_show_Edit').show("slide");
+			$('.job_card_details').hide("slide");
+
+		});
+
+		$('#btnAgreeTerms').click(function ()
+		{
+			$('#chkTerms').prop('checked', true);
+			$('#btnSaveJobCard').prop('disabled', false);
+		});
+
+		$('#btnDisagreeTerms').click(function ()
+		{
+			$('#chkTerms').prop('checked', false);
+			$('#btnSaveJobCard').prop('disabled', true);
+		});
+	});
+
+	function ConfirmDeal(jobCardID, userID)
+	{
+		var flag = confirm('Are you sure that you want to make a deal?');
+		if (flag)
+		{
+			var urlTo = '@Url.Action("SendDealRequest", "Account", new { jobCardId ="_jobCardID", userId = "_userID"})';
+			urlTo = urlTo.replace("_jobCardID", jobCardID);
+			urlTo = urlTo.replace("_userID", userID);
+			urlTo = urlTo.replace(/&amp;/g, "&");
+			window.location.href = urlTo;
+		}
+	}
+
+	function BlockUnblockUser(userID, flagBUB)
+	{
+		var urlTo = "";
+		if (flagBUB == 'B')
+		{
+			var flag = confirm('Are you sure that you want to block this user?');
+			if (flag)
+			{
+				urlTo = '@Url.Action("BlockUser", "Account", new { userId = "_userID"})';
+			}
+		}
+		else
+		{
+			urlTo = '@Url.Action("UnBlockUser", "Account", new { userId = "_userID"})';
+		}
+		urlTo = urlTo.replace("_userID", userID);
+		urlTo = urlTo.replace(/&amp;/g, "&");
+		window.location.href = urlTo;
+	}
+
+	function SetFavourite(userId, flagFav)
+	{
+		var urlTo = "";
+		if (flagBUB == 'F')
+		{
+			var flag = confirm('Are you sure that you want to set this user as favourite?');
+			if (flag)
+			{
+				urlTo = '@Url.Action("FavouriteUser", "Account", new { userId = "_userID"})';
+			}
+		}
+		else
+		{
+			urlTo = '@Url.Action("RemoveFavouriteUser", "Account", new { userId = "_userID"})';
+		}
+		urlTo = urlTo.replace("_userID", userId);
+		urlTo = urlTo.replace(/&amp;/g, "&");
+		window.location.href = urlTo;
+	}
+
+	function Recommend(userId, flagFav)
+	{
+		debugger;
+		var urlTo = "";
+		if (flagFav == 'R')
+		{
+			var flag = confirm('Are you sure that you want to recommend this user?');
+			if (flag)
+			{
+				urlTo = '@Url.Action("RecommendUser", "Account", new { userId = "_userID"})';
+			}
+		}
+		else
+		{
+			urlTo = '@Url.Action("UnRecommendUser", "Account", new { userId = "_userID"})';
+		}
+		urlTo = urlTo.replace("_userID", userId);
+		urlTo = urlTo.replace(/&amp;/g, "&");
+		window.location.href = urlTo;
+	}
+
+	function EditJobCard()
+	{
+
+	}
+
+	function ValidateImage()
+	{
+		debugger;
+		var imgVal = $('#newProfilePhoto').val();
+		if (imgVal == '')
+		{
+			alert('Please select image to upload.');
+			return false;
+		}
+		return true;
+	}
+</script>

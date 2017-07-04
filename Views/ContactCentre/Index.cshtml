@@ -1,0 +1,311 @@
+﻿@using System.IO
+@model ChatValues.Web.Models.ContactCenter
+@{
+    if (ViewBag.ErrorMessage != null)
+    {
+        <script>
+            alert(@ViewBag.ErrorMessage);
+        </script>
+    }
+}
+<div class="home2 pro_view">
+
+    <div class="bg_blue_light pull-left full_width">
+        <div class="">
+            <div class="padding_row">
+                <div class="col-xs-12 col-md-9 col-lg-9">
+                    @*<div class="advertisement_div">
+                            <img width="100%" src="images/advertisement.png" />
+                        </div>*@
+                    <div class="sec_L">
+                        <div class="jobcard_btn border_1">
+                            <ul class="nav nav-pills" style="margin-bottom:10px">
+                                <li class="active">
+                                    <a href="#recommendByMe" data-toggle="tab">Recommended By Me</a>
+                                </li>
+                                <li>
+                                    <a href="#recommendedMe" data-toggle="tab">Users Recommended Me</a>
+                                </li>
+                                <li>
+                                    <a href="#favourite" data-toggle="tab">My Favourite Users</a>
+                                </li>
+                                <li>
+                                    <a href="#blockedUsers" data-toggle="tab">Blocked Users By Me</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content clearfix">
+                                <div class="tab-pane active" id="recommendByMe">
+                                    <div class="jobcard_btn col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        @*<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                                <a class="normal_btn" href="#" style="margin-left: 0; float: left;">People Recommended Me</a>
+                                                <a class="normal_btn" href="#" style="float: left;">Profiles I Recommended</a>
+                                            </div>*@
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="coloum_section pro_img">
+                                            @foreach (var recUser in Model.RecommendedUsersByMe)
+                                            {
+                                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                                    <div class="ccUserProfile inner_coloum" style="height: 160px;">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="br_right">
+
+                                                                    @{
+                                                                        var profilePhoto = "/images/profile_img.jpg";
+                                                                        if (ViewBag.ProfilePicPath != null)
+                                                                        {
+                                                                            if (Directory.Exists(ViewBag.ProfilePicPath + @"\" + recUser.ID))
+                                                                            {
+                                                                                string[] fileNames = Directory.GetFiles(ViewBag.ProfilePicPath + @"\" + recUser.ID);
+                                                                                profilePhoto = "/images/profile/" + recUser.ID + "/" + fileNames[0].Substring(fileNames[0].LastIndexOf(@"\") + 1);
+                                                                            }
+                                                                        }
+                                                                        <img style="" class="img-responsive" src="@profilePhoto" />
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <div class="box_side_home">
+                                                                        <h3>
+                                                                            @recUser.Name
+                                                                        </h3>
+                                                                        @if (string.IsNullOrEmpty(recUser.JobTitle))
+                                                                        {
+                                                                            <div class="text_members" style="height: 22px">
+
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="text_members">
+                                                                                @recUser.JobTitle
+                                                                            </div>
+                                                                        }
+                                                                        <div class="text_sessions">
+                                                                            @recUser.City, @recUser.Country
+                                                                        </div>
+                                                                        <div class="mar-top">
+                                                                            <a class="btn-xs" href="@Url.Action("UserProfile","Account", new { id = recUser.ID})">VIEW PROFILE</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="recommendedMe">
+                                    <div class="jobcard_btn col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        @*<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                                <a class="normal_btn" href="#" style="margin-left: 0; float: left;">People Recommended Me</a>
+                                                <a class="normal_btn" href="#" style="float: left;">Profiles I Recommended</a>
+                                            </div>*@
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="coloum_section pro_img">
+                                            @foreach (var recUser in Model.UsersRecommendedMe)
+                                            {
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="ccUserProfile inner_coloum" style="height: 160px;">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="br_right">
+
+                                                                    @{
+                                                                        var profilePhoto = "/images/profile_img.jpg";
+                                                                        if (ViewBag.ProfilePicPath != null)
+                                                                        {
+                                                                            if (Directory.Exists(ViewBag.ProfilePicPath + @"\" + recUser.ID))
+                                                                            {
+                                                                                string[] fileNames = Directory.GetFiles(ViewBag.ProfilePicPath + @"\" + recUser.ID);
+                                                                                profilePhoto = "/images/profile/" + recUser.ID + "/" + fileNames[0].Substring(fileNames[0].LastIndexOf(@"\") + 1);
+                                                                            }
+                                                                        }
+                                                                        <img style="" class="img-responsive" src="@profilePhoto" />
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <div class="box_side_home">
+                                                                        <h3>
+                                                                            @recUser.Name
+                                                                        </h3>
+                                                                        @if (string.IsNullOrEmpty(recUser.JobTitle))
+                                                                        {
+                                                                            <div class="text_members" style="height: 22px">
+
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="text_members">
+                                                                                @recUser.JobTitle
+                                                                            </div>
+                                                                        }
+                                                                        <div class="text_sessions">
+                                                                            @recUser.City, @recUser.Country
+                                                                        </div>
+                                                                        <div class="mar-top">
+                                                                            <a class="btn-xs" href="@Url.Action("UserProfile","Account", new { id = recUser.ID})">VIEW PROFILE</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="favourite">
+                                    <div class="jobcard_btn col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                            @*<a style="float: left;" class="normal_btn" href="#">Total : 0</a>
+                                                <a style="float: left;" class="normal_btn" href="#">Under progress : 0</a>*@
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="coloum_section pro_img">
+                                            @foreach (var favUser in Model.FavouriteUsers)
+                                            {
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="ccUserProfile inner_coloum" style="height: 160px;">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="br_right">
+
+                                                                    @{
+                                                                        var profilePhoto = "/images/profile_img.jpg";
+                                                                        if (ViewBag.ProfilePicPath != null)
+                                                                        {
+                                                                            if (Directory.Exists(ViewBag.ProfilePicPath + @"\" + favUser.ID))
+                                                                            {
+                                                                                string[] fileNames = Directory.GetFiles(ViewBag.ProfilePicPath + @"\" + favUser.ID);
+                                                                                profilePhoto = "/images/profile/" + favUser.ID + "/" + fileNames[0].Substring(fileNames[0].LastIndexOf(@"\") + 1);
+                                                                            }
+                                                                        }
+                                                                        <img style="" class="img-responsive" src="@profilePhoto" />
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <div class="box_side_home">
+                                                                        <h3>
+                                                                            @favUser.Name
+                                                                        </h3>
+                                                                        @if (string.IsNullOrEmpty(favUser.JobTitle))
+                                                                        {
+                                                                            <div class="text_members" style="height: 22px">
+
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="text_members">
+                                                                                @favUser.JobTitle
+                                                                            </div>
+                                                                        }
+                                                                        <div class="text_sessions">
+                                                                            @favUser.City, @favUser.Country
+                                                                        </div>
+                                                                        <div class="mar-top">
+                                                                            <a class="btn-xs" href="@Url.Action("UserProfile","Account", new { id = favUser.ID})">VIEW PROFILE</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="blockedUsers">
+                                    <div class="jobcard_btn col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        @*<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                                <a style="float: left;" class="normal_btn" href="#">Total : 0</a>
+                                                <a style="float: left;" class="normal_btn" href="#">Under progress : 0</a>
+                                            </div>*@
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="coloum_section pro_img">
+                                            @foreach (var blockUser in Model.BlockedUsers)
+                                            {
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="ccUserProfile inner_coloum" style="height: 160px;">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="br_right">
+
+                                                                    @{
+                                                                        var profilePhoto = "/images/profile_img.jpg";
+                                                                        if (ViewBag.ProfilePicPath != null)
+                                                                        {
+                                                                            if (Directory.Exists(ViewBag.ProfilePicPath + @"\" + blockUser.ID))
+                                                                            {
+                                                                                string[] fileNames = Directory.GetFiles(ViewBag.ProfilePicPath + @"\" + blockUser.ID);
+                                                                                profilePhoto = "/images/profile/" + blockUser.ID + "/" + fileNames[0].Substring(fileNames[0].LastIndexOf(@"\") + 1);
+                                                                            }
+                                                                        }
+                                                                        <img style="" class="img-responsive" src="@profilePhoto" />
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <div class="box_side_home">
+                                                                        <h3>
+                                                                            @blockUser.Name
+                                                                        </h3>
+                                                                        @if (string.IsNullOrEmpty(blockUser.JobTitle))
+                                                                        {
+                                                                            <div class="text_members" style="height: 22px">
+
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="text_members">
+                                                                                @blockUser.JobTitle
+                                                                            </div>
+                                                                        }
+                                                                        <div class="text_sessions">
+                                                                            @blockUser.City, @blockUser.Country
+                                                                        </div>
+                                                                        <div class="mar-top">
+                                                                            <a class="btn-xs" href="@Url.Action("UserProfile","Account", new { id = blockUser.ID})">VIEW PROFILE</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- / End .col-md-8 -->
+                <div class="col-xs-12 col-md-3 col-lg-3">
+                    @*<div class="col-xs-12 no-padding">
+                            <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                        </div>*@
+                    <div class="clear"></div>
+                    @await Component.InvokeAsync("OnlineUserWP")
+                    @*<div class="col-xs-12 no-padding">
+                            <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                        </div>*@
+                </div>
+                <!-- / End .col-md-4 -->
+            </div>
+            <!-- / End .padding_row -->
+        </div>
+    </div>
+    <!-- / End .bg_blue_light .pull-left .full_width -->
+</div>

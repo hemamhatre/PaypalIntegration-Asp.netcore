@@ -1,0 +1,239 @@
+﻿@using System.IO
+@model ChatValues.Web.Models.MemberView
+@{
+}
+<div class="home2">
+
+    <div class="bg_White pull-left full_width">
+
+
+
+        <div class="">
+            <div class="">
+                <div class="col-xs-12 col-md-9 col-lg-9">
+                    <div class="gradint_section">
+
+                    </div>
+
+                    @*<div class="advertisement_div">
+                <img width="100%" src="~/images/advertisement.png" />
+            </div>*@
+                    @if (Model.UserJobCards != null)
+                    {
+                        for (int i = 0; i < Model.UserJobCards.Count; i++)
+                        {
+                            var userJobCard = Model.UserJobCards[i];
+
+
+
+                            <div class="sectoin_data">
+                                <div class="border-Bg">
+                                    <div class="col-md-6">
+                                        <div class="member_card">
+                                            <div class="portfilio_img_card">
+                                                @{
+                                                    var profilePhoto = "/images/profile_img.jpg";
+                                                    if (ViewBag.ProfilePicPath != null)
+                                                    {
+                                                        if (Directory.Exists(ViewBag.ProfilePicPath + @"\" + Model.UserJobCards[i].User.ID))
+                                                        {
+                                                            string[] fileNames = Directory.GetFiles(ViewBag.ProfilePicPath + @"\" + Model.UserJobCards[i].User.ID);
+                                                            profilePhoto = "/images/profile/" + Model.UserJobCards[i].User.ID + "/" + fileNames[0].Substring(fileNames[0].LastIndexOf(@"\") + 1);
+                                                        }
+                                                    }
+                                                    <img class="img-responsive" src="@profilePhoto">
+                                                }
+
+                                            </div>
+                                            <div class="info_card_member">
+                                                <h3 class="margin0">
+                                                    @userJobCard.User.Name, @ViewBag.AgeString
+                                                </h3>
+                                                @userJobCard.SessionName <br />
+                                                <i class="glyphicon glyphicon-map-marker "> </i> @userJobCard.User.City, @userJobCard.User.Country
+                                                <br /><br />
+                                                About Me: <br />
+                                                @userJobCard.User.AboutMe
+                                                <p>
+                                                    <button class="btn-link"><i>View More..</i></button>
+                                                </p>
+                                              
+                                                @if (ViewBag.LoggedInUserID != userJobCard.User.ID.ToString())
+                                                {
+                                                    <div class="row  no-margin">
+                                                        <span class="three_icon text-center">
+                                                            @*<div class="icon_align icon_m" title="Recommend">
+                                                        <a href="#" onclick="Recommend('@userJobCard.User.ID','R')"><i class="glyphicon glyphicon-thumbs-up icon_porperty"></i></a>
+                                                    </div>*@
+                                                            <span class="icon_align icon_m" title="Send message">
+                                                                <a href="#" data-toggle="modal" data-target="#myModal" onclick="document.getElementById('hdnToUserID').value=@userJobCard.User.ID;">
+                                                                    <i class="glyphicon glyphicon-envelope icon_porperty"></i>
+                                                                </a>
+                                                            </span>
+                                                            <span class="icon_align icon_m" title="Add as favourite">
+                                                                <a href="#" onclick="SetFavourite('@userJobCard.User.ID', 'F')"><i class="glyphicon glyphicon-heart icon_porperty"></i></a>
+                                                            </span>
+                                                            <span class="icon_align icon_m" title="Chat">
+                                                                <i class="glyphicon glyphicon-comment icon_porperty"></i>
+                                                            </span>
+                                                            @*<div class="icon_align icon_m" title="Block this user">
+                                                        <a href="#" onclick="BlockUnblockUser('@userJobCard.User.ID','B')"><i class="glyphicon glyphicon-ban-circle icon_porperty"></i></a>
+                                                    </div>*@
+                                                        </span>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    @if (userJobCard.JobCard != null)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="member_card">
+                                                <div class="jobCard pull-left full_width">
+                                                    <div class="title_caard pull-left full_width">
+                                                        JOB TITLE
+                                                    </div>
+                                                    <div class="inner_text">
+                                                        <div class="inner_title pull-left full_width">
+                                                            @userJobCard.JobCard.Title
+                                                        </div>
+                                                        <div class="text_data_title pull-left full_width">
+                                                            <p>
+                                                                @userJobCard.JobCard.Description
+                                                            </p>
+                                                        </div>
+                                                        <div class="btn_jobCard pull-left full_width">
+                                                            <a class="btn btn-primary pull-left"> Value : @userJobCard.JobCard.VoucherValue Vouchers </a>
+
+                                                            <a class="btn btn-primary pull-right" href="@Url.Action("UserProfile", "Account")/@userJobCard.User.ID">View job Card</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-6 mar-TB">
+                                            <div class="member_card">
+                                                <div class="jobCard pull-left full_width">
+                                                    <div class="title_caard pull-left full_width">
+                                                        JOB CARD
+                                                    </div>
+                                                    <div class="inner_text">
+                                                        <div class="inner_title pull-left full_width">
+                                                        </div>
+                                                        <div class="text_data_title pull-left full_width">
+                                                            <p>
+                                                            </p>
+                                                        </div>
+                                                        <div class="btn_jobCard pull-left full_width">
+                                                            <a class="btn" href="@Url.Action("UserProfile", "Account")/@userJobCard.User.ID">ADD NEW JOB CARD</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                                                        }
+                                                    }
+                </div>
+                <!-- / End .col-md-8 -->
+                <div class="col-xs-12 col-md-3 col-lg-3">
+                    @*<div class="col-xs-12 no-padding">
+                            <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                        </div>*@
+                    <div class="clear"></div>
+                    @await Component.InvokeAsync("OnlineUserWP")
+                    @*<div class="col-xs-12 no-padding">
+                            <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                        </div>*@
+                </div>
+                <!-- / End .col-md-4 -->
+            </div>
+            <!-- / End .padding_row -->
+        </div>
+    </div>
+    <!-- / End .bg_blue_light .pull-left .full_width -->
+</div>
+
+<!-- Send message Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            @using (Html.BeginForm("SendMessage", "Message", FormMethod.Post))
+            {
+                <input type="hidden" id="hdnFromUserId" name="hdnFromUserId" value="@ViewBag.UserId" />
+                <input type="hidden" id="hdnToUserID" name="hdnToUserID" />
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Send Message</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea id="txtSendMessage" name="txtSendMessage" class="form-control">Hi! I would like to invite you to discuss on a new prospect.</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Send</button>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function BlockUnblockUser(userID, flagBUB) {
+        var urlTo = "";
+        if (flagBUB == 'B') {
+            var flag = confirm('Are you sure that you want to block this user?');
+            if (flag) {
+                urlTo = '@Url.Action("BlockUser", "Account", new { userId = "_userID"})';
+            }
+        }
+        else {
+            urlTo = '@Url.Action("UnBlockUser", "Account", new { userId = "_userID"})';
+        }
+        urlTo = urlTo.replace("_userID", userID);
+        urlTo = urlTo.replace(/&amp;/g, "&");
+        window.location.href = urlTo;
+    }
+
+    function SetFavourite(userId, flagFav) {
+        var urlTo = "";
+        if (flagBUB == 'F') {
+            var flag = confirm('Are you sure that you want to set this user as favourite?');
+            if (flag) {
+                urlTo = '@Url.Action("FavouriteUser", "Account", new { userId = "_userID"})';
+            }
+        }
+        else {
+            urlTo = '@Url.Action("RemoveFavouriteUser", "Account", new { userId = "_userID"})';
+        }
+        urlTo = urlTo.replace("_userID", userID);
+        urlTo = urlTo.replace(/&amp;/g, "&");
+        window.location.href = urlTo;
+    }
+
+    function Recommend(userId, flagFav) {
+        var urlTo = "";
+        if (flagBUB == 'R') {
+            var flag = confirm('Are you sure that you want to recommend this user?');
+            if (flag) {
+                urlTo = '@Url.Action("RecommendUser", "Account", new { userId = "_userID"})';
+            }
+        }
+        else {
+            urlTo = '@Url.Action("UnRecommendUser", "Account", new { userId = "_userID"})';
+        }
+        urlTo = urlTo.replace("_userID", userID);
+        urlTo = urlTo.replace(/&amp;/g, "&");
+        window.location.href = urlTo;
+    }
+</script>

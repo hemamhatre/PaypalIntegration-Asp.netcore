@@ -1,0 +1,265 @@
+﻿@model ChatValues.Web.Models.JobCentre
+@{
+    if (ViewBag.ErrorMessage != null)
+    {
+        <script>
+			alert(@ViewBag.ErrorMessage);
+        </script>
+    }
+}
+<div class="pro_view">
+
+    <div class="bg_blue_light pull-left full_width">
+        <div class="padding_row">
+            <div class="col-xs-12 col-md-9 col-lg-9">
+
+                <div class="sec_L">
+                    <div class="jobcard_btn border_1">
+                        <ul class="nav nav-pills" style="margin-bottom:10px;">
+                            <li class="active">
+                                <a href="#bought" data-toggle="tab">Job cards you bought</a>
+                            </li>
+                            <li>
+                                <a href="#sold" data-toggle="tab">Job cards you sold</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Vouchers","JobCentre")">Buy/Redeem vouchers</a>
+                            </li>
+                            <li>
+                                <a href="#recommend" data-toggle="tab">Recommedation</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("PendingVouchers","JobCentre")">Pending Grant Vouchers</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content clearfix">
+                            <div class="tab-pane active" id="bought">
+                                <div class="">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        @{
+                                            var totalCount = (Model.Sold != null && Model.Sold.Count > 0) ? Model.Sold.Count : 0;
+                                            var boughtInProcess = (ViewBag.BoughtDealsInProgressCount != null) ? ViewBag.BoughtDealsInProgressCount : 0;
+                                        }
+                                        <a class="normal_btn" href="#" style="margin-right: 5px; float: left;">Total : @totalCount</a>
+                                        <a class="normal_btn" href="#" style="float: left;">Under progress : @boughtInProcess</a>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table borderless">
+                                            <thead>
+                                                <tr>
+                                                    <th> To </th>
+                                                    <th> </th>
+                                                    <th> </th>
+                                                    <th>  </th>
+                                                    <th> Date</th>
+                                                    <th> </th>
+                                                    <th>Status </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var jobDealBought in Model.Bought)
+                                                {
+                                                    var genderStr = string.IsNullOrEmpty(jobDealBought.SoldByUser.Gender) ? string.Empty : jobDealBought.SoldByUser.Gender;
+                                                    var nameStr = string.IsNullOrEmpty(jobDealBought.SoldByUser.Name) ? string.Empty : jobDealBought.SoldByUser.Name;
+                                                    var cityStr = string.IsNullOrEmpty(jobDealBought.SoldByUser.City) ? string.Empty : jobDealBought.SoldByUser.City;
+                                                    var countryStr = string.IsNullOrEmpty(jobDealBought.SoldByUser.Country) ? string.Empty : jobDealBought.SoldByUser.Country;
+                                                    var jobCardDescStr = string.IsNullOrEmpty(jobDealBought.JobCard.Description) ? string.Empty : jobDealBought.JobCard.Description;
+                                                    if (jobCardDescStr.Length > 75)
+                                                    {
+                                                        jobCardDescStr = jobCardDescStr.Substring(0, 74) + "...";
+                                                    }
+                                                    var dealOnDateStr = (jobDealBought.DealOn.HasValue) ? jobDealBought.DealOn.Value.ToString("dd-MM-yyyy") : string.Empty;
+                                                    var dealOnTimeStr = (jobDealBought.DealOn.HasValue) ? jobDealBought.DealOn.Value.ToString("hh:mm tt") : string.Empty;
+                                                    var jobCardStatusStr = string.IsNullOrEmpty(jobDealBought.Status) ? string.Empty : jobDealBought.Status;
+                                                    <tr>
+                                                        <td width="300px">
+                                                            <div class="tbl_row_align inline_b">
+                                                                @*<i class="glyphicon glyphicon-unchecked"></i>*@
+                                                                <img src="images/profile_pic.png" alt="" />
+                                                            </div>
+                                                            <div class="inline_b">
+                                                                <strong> <a href="@Url.Action("UserProfile","Account", new { id = jobDealBought.SoldByUser.ID})">@nameStr </a></strong><br />
+                                                                <strong> @genderStr </strong><br />
+                                                                <strong> @cityStr, @countryStr</strong>
+                                                            </div>
+                                                            <div class="clear"></div>
+                                                        </td>
+                                                        <td width="1px">
+                                                            <span class="border_left"></span>
+                                                        </td>
+                                                        <td width="450px">
+                                                            <div>
+                                                                <p>@jobCardDescStr</p>
+                                                            </div>
+                                                        </td>
+                                                        <td width="1px">
+                                                            <span class="border_left"></span>
+                                                        </td>
+                                                        <td width="150px">
+                                                            <div>
+                                                                <p>@dealOnDateStr</p>
+                                                                <p>@dealOnTimeStr</p>
+                                                            </div>
+                                                        </td>
+                                                        <td width="1px">
+                                                            <span class="border_left"></span>
+                                                        </td>
+                                                        <td width="100px">
+                                                            <div>
+                                                                <p>@jobCardStatusStr</p>
+                                                                @*<div class="icon_align" title="Mark as complete">
+                                                                        <a onclick="MarkAsComplete('@jobDealBought.ID')">
+                                                                            <i class="glyphicon glyphicon-check icon_porperty"></i>
+                                                                        </a>
+                                                                    </div>*@
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="sold">
+                                <div class="jobcard_btn col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        @{
+                                            var totalSoldCount = (Model.Sold != null && Model.Sold.Count > 0) ? Model.Sold.Count : 0;
+                                            var soldInProcess = (ViewBag.SoldDealsInProgressCount != null) ? ViewBag.SoldDealsInProgressCount : 0;
+                                        }
+                                        <a style="margin-right: 5px; float: left;" class="normal_btn" href="#">Total : @totalSoldCount</a>
+                                        <a style="float: left;" class="normal_btn" href="#">Under progress : @soldInProcess</a>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table borderless">
+                                            <thead>
+                                                <tr>
+                                                    <th> To </th>
+                                                    <th> </th>
+                                                    <th> </th>
+                                                    <th>  </th>
+                                                    <th> Date</th>
+                                                    <th> </th>
+                                                    <th>Status </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var jobDealSold in Model.Sold)
+                                                {
+                                                    var genderStr = string.IsNullOrEmpty(jobDealSold.BoughtByUser.Gender) ? string.Empty : jobDealSold.BoughtByUser.Gender;
+                                                    var nameStr = string.IsNullOrEmpty(jobDealSold.BoughtByUser.Name) ? string.Empty : jobDealSold.BoughtByUser.Name;
+                                                    var cityStr = string.IsNullOrEmpty(jobDealSold.BoughtByUser.City) ? string.Empty : jobDealSold.BoughtByUser.City;
+                                                    var countryStr = string.IsNullOrEmpty(jobDealSold.BoughtByUser.Country) ? string.Empty : jobDealSold.BoughtByUser.Country;
+                                                    var jobCardDescStr = string.IsNullOrEmpty(jobDealSold.JobCard.Description) ? string.Empty : jobDealSold.JobCard.Description;
+                                                    if (jobCardDescStr.Length > 75)
+                                                    {
+                                                        jobCardDescStr = jobCardDescStr.Substring(0, 74) + "...";
+                                                    }
+                                                    var dealOnDateStr = (jobDealSold.DealOn.HasValue) ? jobDealSold.DealOn.Value.ToString("dd-MM-yyyy") : string.Empty;
+                                                    var dealOnTimeStr = (jobDealSold.DealOn.HasValue) ? jobDealSold.DealOn.Value.ToString("hh:mm tt") : string.Empty;
+                                                    var jobCardStatusStr = string.IsNullOrEmpty(jobDealSold.Status) ? string.Empty : jobDealSold.Status;
+                                                    <tr>
+                                                        <td width="300px">
+                                                            <div class="tbl_row_align inline_b">
+                                                                @*<i class="glyphicon glyphicon-unchecked"></i>*@
+                                                                <img src="images/profile_pic.png" alt="" />
+                                                            </div>
+                                                            <div class="inline_b">
+                                                                <strong> <a href="@Url.Action("UserProfile","Account", new { id = jobDealSold.BoughtByUser.ID})">@nameStr</a> </strong><br />
+                                                                <strong> @genderStr</strong><br />
+                                                                <strong> @cityStr, @countryStr</strong>
+                                                            </div>
+                                                            <div class="clear"></div>
+                                                        </td>
+                                                        <td width="1px">
+                                                            <span class="border_left"></span>
+                                                        </td>
+                                                        <td width="450px">
+                                                            <div>
+                                                                <p>@jobCardDescStr</p>
+                                                            </div>
+                                                        </td>
+                                                        <td width="1px">
+                                                            <span class="border_left"></span>
+                                                        </td>
+                                                        <td width="150px">
+                                                            <div>
+                                                                <p>@dealOnDateStr</p>
+                                                                <p>@dealOnTimeStr</p>
+                                                            </div>
+                                                        </td>
+                                                        <td width="1px">
+                                                            <span class="border_left"></span>
+                                                        </td>
+                                                        <td width="100px">
+                                                            <div>
+                                                                <p>@jobCardStatusStr</p>
+                                                                @if (jobCardStatusStr.Equals("In process"))
+                                                                {
+                                                                    <div class="icon_align" title="Mark as complete">
+                                                                        <a onclick="MarkAsComplete('@jobDealSold.ID')">
+                                                                            <i class="glyphicon glyphicon-check icon_porperty"></i>
+                                                                        </a>
+                                                                    </div>		}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="recommend">
+                                <div class="jobcard_btn col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        @{
+
+                                            var totalRecommendCount = (ViewBag.RecommendationCount != null) ? ViewBag.RecommendationCount : 0;
+                                        }
+                                        <a style="margin-right: 5px; float: left;" class="normal_btn" href="#">Total : @totalRecommendCount</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / End .col-md-8 -->
+            <div class="col-xs-12 col-md-3 col-lg-3">
+                @*<div class="col-xs-12 no-padding">
+                        <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                    </div>*@
+                <div class="clear"></div>
+                @await Component.InvokeAsync("OnlineUserWP")
+                @*<div class="col-xs-12 no-padding">
+                        <img class="advertisement_banner" src="~/images/advertisement_banner.png" alt="" />
+                    </div>*@
+            </div>
+            <!-- / End .col-md-4 -->
+        </div>
+        <!-- / End .padding_row -->
+    </div>
+</div>
+<!-- / End .bg_blue_light .pull-left .full_width -->
+</div>
+<script>
+	function MarkAsComplete(jdID)
+	{
+		var flag = confirm('Are you sure that you want to mark this job card as complete?');
+		if (flag)
+		{
+			var urlTo = '@Url.Action("MarkJobCardComplete", "JobCentre", new { id ="_jdID"})';
+			urlTo = urlTo.replace("_jdID", jdID);
+			urlTo = urlTo.replace(/&amp;/g, "&");
+			window.location.href = urlTo;
+		}
+	}
+</script>

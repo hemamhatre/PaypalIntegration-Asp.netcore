@@ -1,0 +1,149 @@
+﻿@using System.IO
+@model List<ChatValues.Web.Models.Message>
+@{
+    ChatValues.Web.Models.User toUser = new ChatValues.Web.Models.User();
+    var activeClass = "active_mail active_check";
+    int i = 0;
+}
+@if (ViewBag.ToUser != null)
+{
+    toUser = ViewBag.ToUser;
+}
+<div class="padding_row pro_view">
+    
+    <div class="pull-left full_width col-md-12">
+        <div class="col-md-9 padding_0 border_right">
+            <div class="inbox_container">
+
+
+                <div class="searchbar_parent">
+                    
+                    <div class="right-coloum_inbox col-md-12">
+                        <div class="info_mail">
+                            <table class="profile_tab">
+                                <tr>
+                                    <td>
+                                        <div class="img_profile">
+                                            
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div> <strong> @toUser.Name </strong> </div>
+                                        <div>
+                                            @toUser.JobTitle
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="all_mail_box">
+
+                    <div class="left_coloum_inbox col-md-4">
+                        <div class="bor_left">
+                            
+                            <div class="mail_listing">
+                                
+                                @foreach (var message in Model)
+                                {
+                                    if(i != 0)
+                                    {
+                                        activeClass = "active_check";
+                                    }
+                                    i++;
+                                    <label class="full_width click_lable">
+                                        <input class="checkB-x" type="checkbox" value="@message.ID">
+                                            <a class="@activeClass">
+                                                <div class="mail_title_conatiner">
+                                                    <table class="profile_title_table">
+                                                        <tr>
+                                                            <td>
+                                                                <div class="profile_img_mail_title">
+                                                                    @{
+                                                                        var profilePhoto = "/images/profile_img.jpg";
+                                                                        if (ViewBag.ProfilePicPath != null)
+                                                                        {
+                                                                            if (Directory.Exists(ViewBag.ProfilePicPath + @"\" + message.FromUser.ID))
+                                                                            {
+                                                                                string[] fileNames = Directory.GetFiles(ViewBag.ProfilePicPath + @"\" + message.FromUser.ID);
+                                                                                profilePhoto = "/images/profile/" + message.FromUser.ID + "/" + fileNames[0].Substring(fileNames[0].LastIndexOf(@"\") + 1);
+                                                                            }
+                                                                        }
+                                                                        <img width="100%" src="@profilePhoto" />
+                                                                    }
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                @message.FromUser.Name
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </a>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="right-coloum_inbox col-md-8">
+                        @foreach (var msg in Model)
+                        {
+                            <div id="@msg.ID" class="msg_box">
+                                <div class="mail_body">
+                                    <h4>
+                                        Please connect with me!
+                                    </h4>
+                                    <p>
+                                        @msg.MessageBody
+                                    </p>
+                                </div>
+                                <div class="btn_mail_replay text-center">
+                                    <a class="btn btn-default" href="#" role="button">Accept</a>
+                                    <button class="btn btn-default" type="submit">Reject</button>
+                                    <input class="btn btn-default" type="button" value="Accept later">
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+
+        <div class="col-md-3 padding_0">
+            <table class="text-center" style="width:100%;">
+                <tr>
+                    <td style="height:600px; vertical-align:middle" bgcolor="#999999">
+                        advertisement
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.img_profile').html($('.profile_pic').html());
+
+            $('.click_lable').click(function () {
+                $('.checkB-x').prop('checked', false);
+                $('.msg_box').hide();
+                $('.active_check').removeClass('active_mail');
+                $(this).find('a').addClass('active_mail');
+                $(this).find('input').prop('checked', true);
+                var id = $(this).find('input').val();
+                $('#' + id + '').show();
+            });
+
+            var active_show = $('.active_mail').parent().find('input').val();
+            $('#' + active_show + '').show();
+        });
+    </script>

@@ -1,0 +1,52 @@
+﻿@using System.IO
+@using System.Security.Claims;
+@model List<ChatValues.Web.Models.OnlineUser>
+@{
+    //Layout = null;
+    //var olUsers = ViewBag.OnlineUsers;
+    var userClaim = (ClaimsIdentity)User.Identity;
+    var userIdVal = userClaim.Claims.FirstOrDefault<Claim>(c => c.Type == ClaimTypes.NameIdentifier);
+}
+@*<html>
+    <head>
+        <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>*@
+<div class="row_bg ">
+    <h5>Members Online</h5>
+    <div class="col-md-12 chat_list">
+        @if (Model != null && Model.Count > 0)
+            {
+                foreach (var onlineUser in Model)
+                {
+                    if (onlineUser.UserID != int.Parse(userIdVal.Value))
+                    {
+                    <div class="col-xs-12 mar-btm">
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                            @{
+                                var profilePhoto = "/images/profile_img.jpg";
+                                if (ViewBag.ProfilePicPath != null)
+                                {
+                                    if (Directory.Exists(ViewBag.ProfilePicPath + @"\" + onlineUser.UserID))
+                                    {
+                                        string[] fileNames = Directory.GetFiles(ViewBag.ProfilePicPath + @"\" + onlineUser.UserID);
+                                        profilePhoto = "/images/profile/" + onlineUser.UserID + "/" + fileNames[0].Substring(fileNames[0].LastIndexOf(@"\") + 1);
+                                    }
+                                }
+                                <img class="chat_img" src="@profilePhoto" />
+                            }
+
+                            <h5><a href="@Url.Action("UserProfile","Account", new { id = onlineUser.UserID })">@onlineUser.User.Name</a></h5>
+                        </div>
+                        <div class="col-xs-2 no-padding">
+                            <img class="chat_icon" src="~/images/chat_icon.png" alt="" />
+                        </div>
+                    </div>
+                        <div class="clear"></div>
+                                        }
+                                    }
+                                }
+    </div>
+</div>
+@*</body>
+    </html>*@

@@ -1,0 +1,190 @@
+﻿@using System.Security.Claims
+@{
+
+	if (ViewBag.ErrorMessage != null)
+	{
+		<script>
+			alert(@ViewBag.ErrorMessage);
+		</script>
+	}
+	var userClaim = (ClaimsIdentity)User.Identity;
+	var issuerVal = userClaim.Claims.FirstOrDefault<Claim>(x => x.Issuer == Constants.Issuer);
+	var userIdVal = userClaim.Claims.FirstOrDefault<Claim>(c => c.Type == ClaimTypes.NameIdentifier);
+	var userPicVal = userClaim.Claims.FirstOrDefault<Claim>(c => c.Type == ClaimTypes.Webpage);
+}
+
+
+
+
+<nav class="navbar navbar-static-top" role="navigation">
+	<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+		<span class="sr-only">Toggle navigation</span>
+	</a>
+
+	<a class="deskto_btn">
+		<i class="fa fa-bars" aria-hidden="true"></i>
+	</a>
+
+	@*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- OLD code -=-=-=-=--=-=-=-=-=-=-=-=-=-=-=*@
+
+
+	@if (issuerVal == null)
+	{
+
+
+
+
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+
+				<a class="navbar-brand" href="#">
+
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="" id="">
+
+
+
+
+
+				<div class="newPositionForm text-center">
+					<div class="text_psd">
+						ChatValues.com connects people in the same expertise and the same interests all over the world
+					</div>
+
+					<div class="margin_div_max">
+						<div class="logo_login">
+							<img src="~/images/logo.png" width="150px" />
+						</div>
+
+						<div class="buttons_login">
+							<div class="pull-left w50">
+								<a class="log_sign_btn btn-white">
+									Log in
+								</a>
+							</div>
+							<div class="pull-left w50">
+								<a class="log_sign_btn btn-gray" href="@Url.Action("UserRegistration","Account")">
+									Sign up
+								</a>
+							</div>
+						</div>
+
+
+						<div class="max-width_login">
+
+
+							@using (Html.BeginForm("LoginUser", "Account", FormMethod.Post, new { @Class = "NewPosi_form" }))
+							{
+								<div class="form-group">
+									<label class="lable_login">Username</label>
+									@*@Html.TextBoxFor(model => model.Email, new { @Class = "form-control login_page_field", placeholder = "Jane Doe" })*@
+									<input id="Email" name="Email" class="form-control login_page_field" placeholder="Username" />
+								</div>
+								<div class="form-group">
+									<label class="lable_login">Password</label>
+									@*@Html.PasswordFor(model => model.Password, new { @Class = "form-control login_page_field", placeholder = "*******", @type = "password" })*@
+									<input id="LoginPassword" name="LoginPassword" class="form-control login_page_field" placeholder="Password" type="password" />
+								</div>
+								@if (string.IsNullOrWhiteSpace(@ViewBag.ErrorMessage) == false)
+								{
+									<div class="alert alert-danger">
+										@ViewBag.ErrorMessage
+									</div>
+								}
+								<button type="submit" class="btn btn-primary btn_Blue">Login</button>
+								<br />	
+                                <a href="@Url.Action("ForgotPassword", "Account")" class="pull-right">Forgot password</a>
+                            }
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	}
+	else
+	{
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed position_responsive" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<img class="searchIcon_Drop" src="~/images/search_icon.png" />
+				</button>
+				<a class="navbar-brand" href="#">
+
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="position_icons">
+				<ul class="icon_home">
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="Notification">
+							<img class="home_icon_common" src="~/images/notification.png"/> @*<span class="count_notificaion"> 2 </span>*@
+						</a>
+						@*<ul class="dropdown-menu dropdown-menu-right">
+								<li><a href="#">Notification.....</a></li>
+								<li><a href="#">Notification.....</a></li>
+								<li><a href="#">Notification.....</a></li>
+							</ul>*@
+					</li>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"  title="Notification">
+							<img class="home_icon_common" src="~/images/chat_room.png" /> @*<span class="count_notificaion"> 2 </span>*@
+						</a>
+						@*<ul class="dropdown-menu dropdown-menu-right">
+								<li><a href="#">Chat ....</a></li>
+								<li><a href="#">Chat ....</a></li>
+								<li><a href="#">Chat ....</a></li>
+							</ul>*@
+					</li>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<div class="profile_pic">
+								<img class="home_icon" src="@userPicVal.Value" />
+							</div>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a href="@Url.Action("UserProfile", "Account", new { id = userIdVal.Value })"> Profile </a></li>
+							<li><a href="@Url.Action("LogoutUser", "Account")"> Log Out </a></li>
+
+
+						</ul>
+					</li>
+
+				</ul>
+
+			</div><!-- /.navbar-collapse -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				@using (Html.BeginForm("Index", "Search", FormMethod.Post, new { @Class = "navbar-form margin_left_custom form_search" }))
+				{
+					<div class="form-group">
+						<input type="text" id="searchTextBox" name="searchTextBox" class="form-control search_new-field" placeholder="" onkeypress="return runScript(event)">
+					</div>
+					<button type="submit" class="trans_btn icon_btn_search">
+						<img class="home_icon_common" src="~/images/search_icon.png" />
+					</button>
+				}
+			</div>
+			<!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	}
+</nav>
+<script>
+	function runScript(e)
+	{
+		if (e.keyCode == 13)
+		{
+			var tb = document.getElementById("searchTextBox");
+			eval(tb.value);
+			return false;
+		}
+	}
+</script>

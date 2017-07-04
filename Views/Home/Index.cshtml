@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+    if (ViewBag.ErrorMessage != null)
+    {
+        <script>
+            alert(@ViewBag.ErrorMessage);
+        </script>
+    }
+}
+
+
+<style>
+    .main-sidebar, .lable_login, .deskto_btn, .main-footer, .sidebar-toggle {
+        display: none !important;
+    }
+
+    .wrapper {
+        
+    }
+
+    .login_main_wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 888;
+        background-image: url('../../images/back_login.jpg');
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        min-height: 130%;
+    }
+
+
+    .main-header {
+        position: initial !important;
+        max-height: initial !important;
+    }
+
+.newPositionForm {
+    position: absolute;
+    right: 6%;
+    top: 13%;
+    width: 43%;
+    min-width: 320px;
+}
+    .margin_div_max {
+    float: right;
+    width: 100%;
+    max-width: 367px;
+}
+.text_psd {
+    margin:0 0 3px 0;
+    text-align: left;
+    color: #fff;
+    text-shadow: 1px 1px 4px black;
+    font-size: 32px;
+}
+    nav.navbar.navbar-static-top {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        left: 0;
+        top: 0;
+        background: none !important;
+    }
+
+    .max-width_login {
+        background: rgba(235, 237, 241, 0.75);
+        padding: 19px;
+        border-radius: 5px;
+        text-align: center;
+        float: left;
+        width: 100%;
+    }
+
+    .btn-white {
+        background: rgba(235, 237, 241, 0.75);
+        border: none;
+        color: #43a2d9 !important;
+    }
+
+    .btn-gray {
+        background: rgba(186, 190, 199, 0.75);
+        color: #fff;
+    }
+
+    .w50 {
+        width: 50%;
+    }
+
+    .log_sign_btn {
+        float: left;
+        width: 100%;
+        padding: 9px 0;
+        border-radius: 5px;
+        font-size: 21px;
+    }
+
+    .login_page_field {
+        background: #fff !important;
+        border-radius: 5px;
+        margin: 18px 0;
+    }
+
+    button.btn.btn-primary.btn_Blue {
+        background: #41a0d8 !important;
+        width: 100%;
+        font-size: 28px;
+        border: none !important;
+        color: #fff !important;
+        border-radius: 13px;
+    }
+
+    .logo_login {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="login_main_wrapper">
+    <div class="bg_login">
+
+    </div>
+</div>
+
+
+@*<div class="bg_blue_light pull-left full_width">
+    <div class="">
+        <div class="padding_row">
+            <div class="col-md-6">
+                <div class="left_side_bar">
+                    <table class="table_left_side">
+                        <tr>
+                            <td>
+                                <div class="text_log_in">
+                                    If you can show others a real chance,<br>
+                                    If you can show people a better way of living<br>
+                                    If you can add up values and knowledge
+                                </div>
+                                <h2 class="text_log">
+                                    YOU DESERVE to earn money..
+                                </h2>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div>
+                                    <button type="button" class="btn btn-primary red_btn common_css" onclick="window.location.href='@Url.Action("UserRegistration","Account")'">JOIN FOR FREE</button>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+
+                <div class="right_side_bar">
+                    <img class="img-responsive" src="~/images/left-side.png" />
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>*@
